@@ -1,0 +1,68 @@
+[
+  {
+    "analysis_id": "1",
+    "category": "Forex",
+    "symbol": "EUR/USD",
+    "graph_image_url": "https://via.placeholder.com/400x300?text=EUR/USD+Chart",
+    "description": "EUR/USD showing strong bullish bias with potential break above 1.0900 resistance level. Support established at 1.0800.",
+    "status": "active",
+    "scheduled_at": "2024-01-22T08:00:00Z",
+    "created_at": "2024-01-22T08:00:00Z",
+    "updated_at": "2024-01-22T08:00:00Z"
+  },
+  {
+    "analysis_id": "2",
+    "category": "Forex",
+    "symbol": "GBP/USD",
+    "graph_image_url": "https://via.placeholder.com/400x300?text=GBP/USD+Chart",
+    "description": "GBP/USD consolidating between 1.2650 and 1.2750. Watch for break in either direction for next move.",
+    "status": "active",
+    "scheduled_at": "2024-01-22T09:00:00Z",
+    "created_at": "2024-01-22T07:30:00Z",
+    "updated_at": "2024-01-22T07:30:00Z"
+  },
+  {
+    "analysis_id": "3",
+    "category": "Forex",
+    "symbol": "USD/JPY",
+    "graph_image_url": "https://via.placeholder.com/400x300?text=USD/JPY+Chart",
+    "description": "USD/JPY trading in uptrend with key resistance at 150.50. Continuation expected if 150 support holds.",
+    "status": "active",
+    "scheduled_at": "2024-01-22T10:00:00Z",
+    "created_at": "2024-01-22T06:45:00Z",
+    "updated_at": "2024-01-22T06:45:00Z"
+  },
+  {
+    "analysis_id": "4",
+    "category": "Crypto",
+    "symbol": "BTC/USD",
+    "graph_image_url": "https://via.placeholder.com/400x300?text=BTC/USD+Chart",
+    "description": "Bitcoin showing strong recovery above $42,000. Next target is $45,000 resistance. Keep stop loss below $40,500.",
+    "status": "active",
+    "scheduled_at": "2024-01-22T08:30:00Z",
+    "created_at": "2024-01-22T08:30:00Z",
+    "updated_at": "2024-01-22T08:30:00Z"
+  },
+  {
+    "analysis_id": "5",
+    "category": "Crypto",
+    "symbol": "ETH/USD",
+    "graph_image_url": "https://via.placeholder.com/400x300?text=ETH/USD+Chart",
+    "description": "Ethereum breaking above $2,300 with strong momentum. Watch for resistance at $2,500.",
+    "status": "active",
+    "scheduled_at": "2024-01-22T09:15:00Z",
+    "created_at": "2024-01-22T09:15:00Z",
+    "updated_at": "2024-01-22T09:15:00Z"
+  },
+  {
+    "analysis_id": "6",
+    "category": "Crypto",
+    "symbol": "XRP/USD",
+    "graph_image_url": "https://via.placeholder.com/400x300?text=XRP/USD+Chart",
+    "description": "XRP consolidating in tight range. Breakout expected soon. Entry on break above $2.80.",
+    "status": "inactive",
+    "scheduled_at": "2024-01-23T08:00:00Z",
+    "created_at": "2024-01-21T10:00:00Z",
+    "updated_at": "2024-01-21T10:00:00Z"
+  }
+]
