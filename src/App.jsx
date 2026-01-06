@@ -16,7 +16,7 @@ import useSubscriptionStore from './stores/subscriptionStore';
 import useVerificationStore from './stores/verificationStore';
 import useHomeStore from './stores/homeStore';
 import RegisterPage from './pages/Register';
-import LoginPage from './pages/login';
+import LoginPage from './pages/Login';
 import Result from './pages/Results';
 import { userAPI, adminAPI, roleAPI, subscriptionAPI, verificationAPI } from './services/api';
 import { announcementAPI, pairAnalysisAPI, partnerAPI } from './services/homeApi';
