@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Toaster } from "react-hot-toast";
 import Dashboard from './pages/Dashboard';
 import Home from './pages/Home';
 import Users from './pages/Users';
@@ -14,8 +15,14 @@ import useRoleStore from './stores/roleStore';
 import useSubscriptionStore from './stores/subscriptionStore';
 import useVerificationStore from './stores/verificationStore';
 import useHomeStore from './stores/homeStore';
+import RegisterPage from './pages/Register';
+import LoginPage from './pages/login';
+import Result from './pages/Results';
 import { userAPI, adminAPI, roleAPI, subscriptionAPI, verificationAPI } from './services/api';
 import { announcementAPI, pairAnalysisAPI, partnerAPI } from './services/homeApi';
+import userAuth from './auth/useAuth';
+import ProtectedRoute from './auth/ProtectedRoute';
+
 
 function App() {
   const { setUsers } = useUserStore();
@@ -25,10 +32,18 @@ function App() {
   const { setSubscriptions } = useSubscriptionStore();
   const { setVerifications } = useVerificationStore();
   const { setAnnouncements, setPairAnalysis } = useHomeStore();
+  const { isAuthenticated, login, userRole } = userAuth(); // Now pulls the correct values
+
+
+
 
   useEffect(() => {
     // Initial data load
     const loadData = async () => {
+      if (!isAuthenticated) {
+        console.log('User not authenticated. Skipping initial data load.');
+        return;
+      }
       try {
         const [
           userData,
@@ -73,21 +88,86 @@ function App() {
     setVerifications,
     setAnnouncements,
     setPairAnalysis,
+    isAuthenticated,
   ]);
 
   return (
+    <>
+    <Toaster position="top-right" reverseOrder={false} />
     <Router>
       <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/users" element={<Users />} />
-        <Route path="/admins" element={<Admins />} />
-        <Route path="/subscriptions" element={<Subscriptions />} />
-        <Route path="/partners" element={<Partners />} />
-        <Route path="/verifications" element={<Verifications />} />
-        <Route path="*" element={<Navigate to="/" />} />
+
+        {/* Authentication Routes (Public/Unprotected) */}
+        <Route path='/login' element={
+          isAuthenticated ? (
+            <Navigate to="/" />
+          ) : (<LoginPage onSuccessfulLogin={login} />)
+        } />
+
+        <Route path='/register' element={
+          isAuthenticated ? (
+            <Navigate to="/" />
+          ) : (<RegisterPage onSuccessfulRegistration={() => { }} />)
+        } />
+
+        {/* Protected Admin Routes (FIX 2 applied) */}
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute roles={["admin", "super_admin"]}>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/home"
+          element={
+            <ProtectedRoute roles={["admin", "super_admin"]}>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/users"
+          element={
+            <ProtectedRoute roles={["admin", "super_admin"]}>
+              <Users />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admins"
+          element={
+            <ProtectedRoute roles={["super_admin"]}>
+              <Admins />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/subscriptions"
+          element={
+            <ProtectedRoute roles={["admin", "super_admin"]} >
+              <Subscriptions />
+            </ProtectedRoute>} />
+        <Route path="/partners" element={<ProtectedRoute roles={["admin", "super_admin"]} >
+          <Partners />
+        </ProtectedRoute>
+        } />
+        <Route path="/verifications" element={<ProtectedRoute roles={["admin", "super_admin"]} >
+          <Verifications />
+        </ProtectedRoute>
+        } />
+        <Route
+          path="/results"
+          element={<ProtectedRoute roles={["admin", "super_admin"]}>
+            <Result />
+          </ProtectedRoute>
+          } />
+        {/* Catch-all: Redirects to Dashboard if authenticated, otherwise to login */}
+        <Route path="*" element={<LoginPage />} />
       </Routes>
     </Router>
+    </>
   );
 }
 

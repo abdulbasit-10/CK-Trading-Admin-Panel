@@ -19,6 +19,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     { name: 'Dashboard', icon: HomeIcon, path: '/' },
     { name: 'Home', icon: MegaphoneIcon, path: '/home' },
     { name: 'Verifications', icon: CheckBadgeIcon, path: '/verifications' },
+    { name: 'Results', icon: CheckBadgeIcon, path: '/results' },
   ];
 
   const roleMenuItems = [
@@ -151,8 +152,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         </div>
       </nav>
 
-      <div className="absolute bottom-4 left-4 right-4">
-        <button className="flex items-center space-x-3 w-full px-4 py-3 rounded-lg hover:bg-blue-500 transition text-white">
+      <div className="bottom-4 left-4 right-4">
+        <button className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-blue-500 transition text-white">
           <ArrowLeftOnRectangleIcon className="w-6 h-6" />
           {isOpen && <span>Logout</span>}
         </button>

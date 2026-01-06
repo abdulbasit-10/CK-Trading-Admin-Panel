@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-hot-toast'; // or 'react-toastify' depending on your setup
 import useAdminStore from '../stores/adminStore';
-import { adminAPI, roleAPI } from '../services/api';
+import { adminAPI } from '../api/adminApi';
 import MainLayout from '../layouts/MainLayout';
 import AdminForm from '../components/AdminForm';
-import EditableUserTable from '../components/EditableUserTable';
+import AdminsTable from '../components/AdminTable';
 
 const Admins = () => {
   const { admins, loading, setAdmins, setLoading, setError, error } = useAdminStore();
@@ -18,42 +19,63 @@ const Admins = () => {
     setLoading(true);
     try {
       const [adminsData, rolesData] = await Promise.all([
-        adminAPI.getAll(),
-        roleAPI.getAll(),
+        adminAPI.getAdmins(),
+        adminAPI.getRole(),
       ]);
-      setAdmins(adminsData);
-      setRoles(rolesData);
+      
+      // Handle the nested 'admins' key from your backend response
+      setAdmins(adminsData.admins || []);
+      setRoles(rolesData.roles || []);
       setError(null);
     } catch (err) {
-      setError(err.message);
+      const msg = err.response?.data?.message || "Failed to fetch data";
+      setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
   };
 
   const handleAddAdmin = async (formData) => {
-    setFormLoading(true);
-    try {
-      await adminAPI.create(formData);
-      fetchData();
+  setFormLoading(true);
+  try {
+    // 1. Prepare the payload exactly as the backend expects it
+    const payload = {
+      full_name: formData.full_name,
+      email: formData.email,
+      password: formData.password_hash, // RENAME: backend uses 'password'
+      role_id: formData.role_id
+    };
+
+    // 2. Call the API
+    const response = await adminAPI.createAdmin(payload);
+    
+    // 3. Handle Success
+    if (response.success) {
+      toast.success(response.message || "Admin created!");
+      fetchData(); // Refresh list
       setError(null);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setFormLoading(false);
     }
-  };
+  } catch (err) {
+    // 4. Detailed Error Reporting
+    // This looks for the specific message from your backend (e.g., "Email already exists")
+    const errorMessage = err.response?.data?.message || "Error creating admin";
+    setError(errorMessage);
+    toast.error(errorMessage);
+    console.error("Backend Error:", err.response?.data);
+  } finally {
+    setFormLoading(false);
+  }
+};
 
   const handleEditAdmin = async (id, formData) => {
-    setFormLoading(true);
     try {
+      // Create a promise for the toast loading state if you want
       await adminAPI.update(id, formData);
+      toast.success("Admin updated successfully");
       fetchData();
-      setError(null);
     } catch (err) {
-      setError(err.message);
-    } finally {
-      setFormLoading(false);
+      toast.error(err.response?.data?.message || "Update failed");
     }
   };
 
@@ -61,70 +83,61 @@ const Admins = () => {
     if (window.confirm('Are you sure you want to delete this admin?')) {
       try {
         await adminAPI.delete(id);
+        toast.success("Admin removed from system");
         fetchData();
       } catch (err) {
-        setError(err.message);
+        toast.error("Could not delete admin");
       }
     }
   };
 
-  const getRoleName = (roleId) => {
-    const role = roles.find(r => r.role_id === roleId);
-    if (!role) return 'Unknown';
-    return role.role_name === 'super_admin' ? 'Super Admin' : 'Admin';
-  };
-
+  // Define table columns (same as previous, ensure key names match your backend SELECT query)
   const columns = [
-    { key: 'admin_id', label: 'ID', editable: false },
-    { key: 'email', label: 'Email', type: 'email' },
-    { key: 'full_name', label: 'Full Name', type: 'text' },
-    {
-      key: 'role_id',
-      label: 'Role',
-      type: 'select',
-      options: roles
-        .filter(r => r.role_name !== 'user')
-        .map(r => ({ 
-          value: r.role_id, 
-          label: r.role_name === 'super_admin' ? 'Super Admin' : 'Admin' 
-        })),
-      render: (roleId) => (
-        <span className="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-          {getRoleName(roleId)}
-        </span>
-      ),
+    { 
+      key: 'avatar_url', 
+      label: '', 
+      editable: false,
+      render: (url) => (
+        <img src={url || 'https://via.placeholder.com/40'} className="w-8 h-8 rounded-full" alt="avatar" />
+      )
     },
-    { key: 'created_at', label: 'Created', editable: false },
+    { key: 'full_name', label: 'Full Name', type: 'text' },
+    { key: 'email', label: 'Email', type: 'email' },
+    { 
+      key: 'role_name', 
+      label: 'Role', 
+      editable: false, 
+      render: (val) => (
+        <span className={`px-2 py-1 rounded text-xs font-bold text-white ${
+          val === 'super_admin' ? 'bg-gradient-to-r from-purple-500 to-pink-500' : 'bg-gradient-to-r from-blue-500 to-cyan-500'
+        }`}>
+          {val === 'super_admin' ? 'SUPER ADMIN' : 'ADMIN'}
+        </span>
+      )
+    }
   ];
 
   return (
     <MainLayout>
-      <div className="space-y-6">
-        <div>
+      <div className="space-y-6 pb-12">
+        <header>
           <h1 className="text-3xl font-bold text-gray-900">Admins Management</h1>
-          <p className="text-gray-600 mt-2">Manage admin users and their permissions</p>
-        </div>
+          <p className="text-gray-600">Securely manage your team and access levels</p>
+        </header>
 
-        {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-800">
-            {error}
-          </div>
-        )}
+        {/* Form Section */}
+        <AdminForm onSubmit={handleAddAdmin} loading={formLoading} roles={roles} />
 
-        <AdminForm onSubmit={handleAddAdmin} loading={formLoading} />
-
-        <div className="bg-white rounded-lg shadow">
-          <div className="p-6 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900 mb-1">Admins List</h2>
-            <p className="text-sm text-gray-600">Click edit to modify admin details</p>
-          </div>
-          <EditableUserTable
-            columns={columns}
-            data={admins}
-            loading={loading}
-            onEdit={handleEditAdmin}
-            onDelete={handleDeleteAdmin}
-          />
+        {/* Table Section */}
+        <div className="bg-white rounded-xl shadow-lg border border-gray-100">
+           <AdminsTable 
+              data={admins} 
+              columns={columns} 
+              loading={loading}
+              onEdit={handleEditAdmin}
+              onDelete={handleDeleteAdmin}
+              rowKey="user_id"
+            />
         </div>
       </div>
     </MainLayout>

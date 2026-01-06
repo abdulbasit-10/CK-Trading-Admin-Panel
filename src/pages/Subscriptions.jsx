@@ -1,135 +1,228 @@
-import React, { useState, useEffect } from 'react';
-import useSubscriptionStore from '../stores/subscriptionStore';
-import { subscriptionAPI, userAPI } from '../services/api';
-import MainLayout from '../layouts/MainLayout';
-import EditableUserTable from '../components/EditableUserTable';
+import React, { useEffect, useState, useCallback } from "react";
+import useSubscriptionStore from "../stores/subscriptionStore";
+import { subscriptionAPI } from "../api/subscriptionApi";
+import { userAPI } from "../api/userApi";
+import MainLayout from "../layouts/MainLayout";
+import SubscriptionTable from "../components/SubscriptionTable";
+import toast from "react-hot-toast";
 
 const Subscriptions = () => {
-  const { subscriptions, loading, setSubscriptions, setLoading, setError, error } = useSubscriptionStore();
-  const [users, setUsers] = useState([]);
+  const {
+    subscriptions,
+    loading,
+    setSubscriptions,
+    setLoading,
+    setError,
+    error,
+  } = useSubscriptionStore();
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
+  const [pagination, setPagination] = useState(null);
+  const [status, setStatus] = useState("");
+  const [partners, setPartners] = useState([]);
 
-  const fetchData = async () => {
+  // 🔥 NEW: Action-level loading state
+  const [actionLoadingId, setActionLoadingId] = useState(null);
+  const [actionType, setActionType] = useState(null); // "update" | "delete"
+
+  /* ---------------------------------- FETCH ---------------------------------- */
+
+  const fetchSubscriptions = useCallback(async () => {
     setLoading(true);
     try {
-      const [subscriptionsData, usersData] = await Promise.all([
-        subscriptionAPI.getAll(),
-        userAPI.getAll(),
-      ]);
-      setSubscriptions(subscriptionsData);
-      setUsers(usersData);
+      const response = await subscriptionAPI.getSubscriptions({
+        page,
+        limit,
+        status,
+      });
+
+      setSubscriptions(response.data || []);
+      setPagination(response.pagination || null);
       setError(null);
     } catch (err) {
-      setError(err.message);
+      setError(err.message || "Failed to load subscriptions");
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, limit, status, setLoading, setSubscriptions, setError]);
 
-  const handleEditSubscription = async (id, formData) => {
+  const fetchPartners = async () => {
     try {
-      await subscriptionAPI.update(id, formData);
-      fetchData();
-      setError(null);
+      const response = await userAPI.getPartners();
+      setPartners(response.data || []);
     } catch (err) {
-      setError(err.message);
+      console.error("Failed to fetch partners", err);
     }
   };
 
-  const handleDeleteSubscription = async (id) => {
-    if (window.confirm('Are you sure you want to delete this subscription?')) {
-      try {
-        await subscriptionAPI.delete(id);
-        fetchData();
-      } catch (err) {
-        setError(err.message);
+  useEffect(() => {
+    fetchSubscriptions();
+    fetchPartners();
+  }, [fetchSubscriptions]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [status]);
+
+  /* ---------------------------------- UPDATE ---------------------------------- */
+
+  const handleUpdate = async (id, updatedData) => {
+    try {
+      if (
+        updatedData.plan_type === "lifetime_free" &&
+        !updatedData.partner_user_code
+      ) {
+        toast.error("Partner User Code is required!");
+        return;
       }
+
+      // 🔹 START row loading
+      setActionLoadingId(id);
+      setActionType("update");
+
+      await subscriptionAPI.updateSubscription(id, updatedData);
+      await fetchSubscriptions();
+
+      toast.success("Subscription updated successfully");
+    } catch (err) {
+      toast.error(
+        err?.response?.data?.message || "Failed to update subscription"
+      );
+    } finally {
+      // 🔹 STOP row loading
+      setActionLoadingId(null);
+      setActionType(null);
     }
   };
 
-  const getUserEmail = (userId) => {
-    const user = users.find(u => u.user_id === userId);
-    return user ? user.email : 'Unknown';
+
+  /* ---------------------------------- DELETE ---------------------------------- */
+
+  const handleDeleteSubscription = async (subscriptionId) => {
+    if (!confirm("Are you sure you want to delete this subscription?")) return;
+
+    const toastId = toast.loading("Deleting subscription...");
+    setActionLoadingId(subscriptionId);
+    setActionType("delete");
+
+    try {
+      await subscriptionAPI.deleteSubscription(subscriptionId);
+      toast.success("Subscription deleted successfully", { id: toastId });
+      await fetchSubscriptions();
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message || "Failed to delete subscription",
+        { id: toastId }
+      );
+    } finally {
+      setActionLoadingId(null);
+      setActionType(null);
+    }
   };
 
-  const columns = [
-    { key: 'subscription_id', label: 'ID', editable: false },
-    {
-      key: 'user_id',
-      label: 'User Email',
-      editable: false,
-      render: (userId) => <span>{getUserEmail(userId)}</span>,
-    },
-    {
-      key: 'plan_type',
-      label: 'Plan Type',
-      type: 'select',
-      options: [
-        { value: 'monthly', label: 'Monthly' },
-        { value: 'annually', label: 'Annually' },
-        { value: 'lifetime_free', label: 'Lifetime Free' },
-      ],
-    },
-    {
-      key: 'status',
-      label: 'Status',
-      type: 'select',
-      options: [
-        { value: 'pending', label: 'Pending' },
-        { value: 'active', label: 'Active' },
-        { value: 'expired', label: 'Expired' },
-        { value: 'cancelled', label: 'Cancelled' },
-      ],
-      render: (status) => (
-        <span
-          className={`px-3 py-1 rounded-full text-sm font-medium ${
-            status === 'active'
-              ? 'bg-green-100 text-green-800'
-              : status === 'pending'
-              ? 'bg-yellow-100 text-yellow-800'
-              : status === 'expired'
-              ? 'bg-red-100 text-red-800'
-              : 'bg-gray-100 text-gray-800'
-          }`}
-        >
-          {status}
-        </span>
-      ),
-    },
-    { key: 'start_date', label: 'Start Date', type: 'date' },
-    { key: 'end_date', label: 'End Date', type: 'date' },
-    { key: 'created_at', label: 'Created', editable: false },
-  ];
+  /* -------------------------------- PAGINATION -------------------------------- */
+
+  const handleNextPage = () => {
+    if (pagination && page < pagination.totalPages) {
+      setPage((prev) => prev + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (page > 1) {
+      setPage((prev) => prev - 1);
+    }
+  };
 
   return (
     <MainLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Subscriptions Management</h1>
-          <p className="text-gray-600 mt-2">Manage user subscriptions and plans</p>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Subscriptions Management
+          </h1>
+          <p className="text-gray-600 mt-2">
+            View and manage user subscriptions
+          </p>
         </div>
 
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-800">
-            {error}
+            <strong>Error:</strong> {error}
           </div>
         )}
 
         <div className="bg-white rounded-lg shadow">
           <div className="p-6 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900 mb-1">Subscriptions List</h2>
-            <p className="text-sm text-gray-600">Click edit to modify subscription details</p>
+            <h2 className="text-lg font-semibold text-gray-900">
+              Subscriptions List
+            </h2>
+            {pagination && (
+              <p className="text-sm text-gray-600">
+                Page {pagination.page} of {pagination.totalPages}
+              </p>
+            )}
           </div>
-          <EditableUserTable
-            columns={columns}
+
+          <div className="flex flex-wrap gap-4 items-center p-6 border-b border-gray-200">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Filter by Status
+              </label>
+              <select
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+                className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+              >
+                <option value="">All</option>
+                <option value="pending">Pending</option>
+                <option value="active">Active</option>
+                <option value="expired">Expired</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
+          </div>
+
+          <SubscriptionTable
             data={subscriptions}
+            partners={partners}
             loading={loading}
-            onEdit={handleEditSubscription}
+            onEdit={handleUpdate}
             onDelete={handleDeleteSubscription}
+            actionLoadingId={actionLoadingId}
+            actionType={actionType}
           />
+
+          {pagination && pagination.totalPages > 0 && (
+            <div className="flex items-center justify-between px-6 py-4 border-t">
+              <span className="text-sm text-gray-600">
+                Showing {(pagination.page - 1) * pagination.limit + 1}–
+                {Math.min(
+                  pagination.page * pagination.limit,
+                  pagination.total
+                )}{" "}
+                of {pagination.total}
+              </span>
+
+              <div className="flex gap-2">
+                <button
+                  onClick={handlePrevPage}
+                  disabled={page === 1 || loading}
+                  className="px-4 py-2 text-sm rounded border bg-white hover:bg-gray-50 disabled:opacity-50"
+                >
+                  Previous
+                </button>
+                <button
+                  onClick={handleNextPage}
+                  disabled={page >= pagination.totalPages || loading}
+                  className="px-4 py-2 text-sm rounded border bg-white hover:bg-gray-50 disabled:opacity-50"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </MainLayout>

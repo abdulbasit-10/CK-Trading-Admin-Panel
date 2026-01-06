@@ -1,71 +1,83 @@
 import React, { useState, useEffect } from 'react';
-import useUserStore from '../stores/userStore';
-import { userAPI } from '../services/api';
-import { partnerAPI } from '../services/homeApi';
+import { userAPI } from '../api/userApi';
 import MainLayout from '../layouts/MainLayout';
 import UserForm from '../components/UserForm';
 import EditableUserTable from '../components/EditableUserTable';
+import toast from 'react-hot-toast';
 
 const Users = () => {
-  const { users, loading, setUsers, setLoading, setError, error } = useUserStore();
-  const [formLoading, setFormLoading] = useState(false);
+  const [users, setUsers] = useState([]);
   const [partners, setPartners] = useState([]);
+
+  const [loading, setLoading] = useState(false);
+  const [formLoading, setFormLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const [page, setPage] = useState(1);
+  const limit = 10;
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [page]);
 
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const [usersData, partnersData] = await Promise.all([
-        userAPI.getAll(),
-        partnerAPI.getAll(),
-      ]);
-      setUsers(usersData);
-      setPartners(partnersData);
-      setError(null);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+ const fetchData = async () => {
+  setLoading(true);
+  try {
+    const [usersRes, partnersRes] = await Promise.all([
+      userAPI.getAll(page, limit),
+      userAPI.getPartners(),
+    ]);
 
-  const handleAddUser = async (formData) => {
-    setFormLoading(true);
+    // ✅ Axios response handling
+    setUsers(usersRes.data.users || []);
+    setTotalPages(usersRes.data.totalPages || 1);
+
+    setPartners(partnersRes.data.data || []);
+    setError(null);
+  } catch (err) {
+    console.error(err);
+    setError(err.response?.data?.message || err.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+  const handleAddUser = async (data) => {
     try {
-      await userAPI.create(formData);
+      setFormLoading(true);
+      await userAPI.addUser(data);
+      toast.success('User created successfully');
       fetchData();
-      setError(null);
     } catch (err) {
-      setError(err.message);
+      toast.error(err.response?.data?.message || 'Something went wrong');
     } finally {
       setFormLoading(false);
     }
   };
 
   const handleEditUser = async (id, formData) => {
-    setFormLoading(true);
     try {
+      setFormLoading(true);
       await userAPI.update(id, formData);
+      toast.success('User updated');
       fetchData();
-      setError(null);
     } catch (err) {
-      setError(err.message);
+      toast.error(err.response?.data?.message || 'Update failed');
     } finally {
       setFormLoading(false);
     }
   };
 
   const handleDeleteUser = async (id) => {
-    if (window.confirm('Are you sure you want to delete this user?')) {
-      try {
-        await userAPI.delete(id);
-        fetchData();
-      } catch (err) {
-        setError(err.message);
-      }
+    if (!window.confirm('Delete this user?')) return;
+    try {
+      await userAPI.delete(id);
+      toast.success('User deleted');
+      fetchData();
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Delete failed');
     }
   };
 
@@ -80,95 +92,68 @@ const Users = () => {
     { key: 'email', label: 'Email', type: 'email' },
     { key: 'full_name', label: 'Full Name', type: 'text' },
     {
-      key: 'status',
-      label: 'Status',
-      type: 'select',
-      disabled: true,
-      options: [
-        { value: 'free', label: 'Free' },
-        { value: 'pending_verification', label: 'Pending Verification' },
-        { value: 'premium', label: 'Premium' },
-        { value: 'partner', label: 'Partner' },
-      ],
-      render: (status) => (
-        <span
-          className={`px-3 py-1 rounded-full text-sm font-medium ${
-            status === 'premium'
-              ? 'bg-green-100 text-green-800'
-              : status === 'pending_verification'
-              ? 'bg-yellow-100 text-yellow-800'
-              : status === 'partner'
-              ? 'bg-purple-100 text-purple-800'
-              : 'bg-gray-100 text-gray-800'
-          }`}
-        >
-          {status}
-        </span>
-      ),
-    },
-    { key: 'subscription_expires_at', label: 'Subscription Expires', type: 'date', disabled: true },
-    {
       key: 'partner_id',
       label: 'Partner',
       type: 'select',
       options: [
         { value: '', label: 'No Partner' },
-        ...partners.map(p => ({ value: p.partner_id, label: p.partner_name })),
+        ...partners.map(p => ({
+          value: p.partner_id,
+          label: p.partner_name,
+        })),
       ],
       render: (partnerId) => (
-        <span className="px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
+        <span className="px-3 py-1 rounded-full bg-indigo-100 text-indigo-800">
           {getPartnerName(partnerId)}
         </span>
       ),
     },
-    { key: 'serial_number', label: 'Serial #', type: 'text' },
-    {
-      key: 'lifetime_free',
-      label: 'Lifetime Free',
-      type: 'checkbox',
-      render: (value) => (
-        <span
-          className={`px-3 py-1 rounded-full text-sm font-medium ${
-            value ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-800'
-          }`}
-        >
-          {value ? 'Yes' : 'No'}
-        </span>
-      ),
-    },
-    { key: 'created_at', label: 'Created', editable: false },
-    { key: 'last_login_at', label: 'Last Login', editable: false },
   ];
 
   return (
     <MainLayout>
       <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Users Management</h1>
-          <p className="text-gray-600 mt-2">Manage all registered users and their subscriptions</p>
-        </div>
+        <h1 className="text-3xl font-bold">Users Management</h1>
 
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-800">
+          <div className="bg-red-100 text-red-700 p-4 rounded">
             {error}
           </div>
         )}
 
-        <UserForm onSubmit={handleAddUser} loading={formLoading} />
+        <UserForm
+          onSubmit={handleAddUser}
+          loading={formLoading}
+          partners={partners}
+        />
 
-        <div className="bg-white rounded-lg shadow">
-          <div className="p-6 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900 mb-1">Users List</h2>
-            <p className="text-sm text-gray-600">Click edit to modify user details</p>
-          </div>
-          <EditableUserTable
-            columns={columns}
-            data={users}
-            loading={loading}
-            onEdit={handleEditUser}
-            onDelete={handleDeleteUser}
-            partners={partners}
-          />
+        <EditableUserTable
+          columns={columns}
+          data={users}
+          loading={loading}
+          onEdit={handleEditUser}
+          onDelete={handleDeleteUser}
+        />
+
+        {/* Pagination */}
+        <div className="flex justify-center gap-4 mt-4">
+          <button
+            disabled={page === 1}
+            onClick={() => setPage(p => Math.max(1, p - 1))}
+            className="px-4 py-2 border rounded disabled:opacity-50"
+          >
+            Prev
+          </button>
+
+          <span>Page {page} of {totalPages}</span>
+
+          <button
+            disabled={page === totalPages}
+            onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+            className="px-4 py-2 border rounded disabled:opacity-50"
+          >
+            Next
+          </button>
         </div>
       </div>
     </MainLayout>
