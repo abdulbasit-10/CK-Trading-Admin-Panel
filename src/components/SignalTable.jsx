@@ -50,7 +50,7 @@ const SignalTable = ({ data, onDelete, onUpdate, loading }) => {
                             {/* Media */}
                             {item.image_url && (
                                 <img
-                                    src={item.image_url}
+                                    src={`${import.meta.env.VITE_BASE_URL}${item.image_url}`}
                                     alt="message"
                                     className="mt-2 rounded-lg max-h-80"
                                 />
@@ -58,7 +58,7 @@ const SignalTable = ({ data, onDelete, onUpdate, loading }) => {
 
                             {item.video_url && (
                                 <video
-                                    src={item.video_url}
+                                    src={`${import.meta.env.VITE_BASE_URL}${item.video_url}`}
                                     controls
                                     className="mt-2 rounded-lg max-h-80"
                                 />
@@ -81,7 +81,8 @@ const SignalTable = ({ data, onDelete, onUpdate, loading }) => {
                             </button>
                             <button
                                 onClick={() => onDelete(item.id)}
-                                className="p-1 rounded hover:bg-red-100 text-red-600"
+                                disabled={loading} // Prevent double clicks
+                                className={`p-1 rounded hover:bg-red-100 text-red-600 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                                 title="Delete"
                             >
                                 <TrashIcon className="w-4 h-4" />

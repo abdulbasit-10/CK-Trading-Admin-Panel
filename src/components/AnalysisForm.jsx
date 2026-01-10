@@ -91,14 +91,14 @@ const AnalysisForm = ({ onSubmit, loading }) => {
     data.append('description', formData.description);
     data.append('status', formData.status);
     data.append('visibility', formData.visibility);
-    
+
     if (formData.scheduled_for) {
       data.append('scheduled_for', formData.scheduled_for);
     }
 
     if (formData.graph_image) {
       // 'image' should match the field name your multer middleware expects on the backend
-      data.append('image', formData.graph_image); 
+      data.append('image', formData.graph_image);
     }
 
     // Call the parent onSubmit (which should call pairAnalysisAPI.create)
@@ -133,7 +133,7 @@ const AnalysisForm = ({ onSubmit, loading }) => {
           <select
             name="category"
             value={formData.category}
-            onChange={(e) => setFormData({...formData, category: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, category: e.target.value })}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
           >
             <option value="Forex">Forex</option>
@@ -169,7 +169,7 @@ const AnalysisForm = ({ onSubmit, loading }) => {
           <select
             name="status"
             value={formData.status}
-            onChange={(e) => setFormData({...formData, status: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, status: e.target.value })}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
           >
             <option value="active">Active</option>
@@ -184,7 +184,7 @@ const AnalysisForm = ({ onSubmit, loading }) => {
             type="datetime-local"
             name="scheduled_for"
             value={formData.scheduled_for}
-            onChange={(e) => setFormData({...formData, scheduled_for: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, scheduled_for: e.target.value })}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm"
           />
         </div>
@@ -198,7 +198,7 @@ const AnalysisForm = ({ onSubmit, loading }) => {
             <img src={formData.graph_image_preview} alt="Preview" className="max-w-md h-64 object-contain rounded-lg border-2 border-blue-100 bg-gray-50" />
             <button
               type="button"
-              onClick={() => setFormData({...formData, graph_image: null, graph_image_preview: ''})}
+              onClick={() => setFormData({ ...formData, graph_image: null, graph_image_preview: '' })}
               className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 shadow-lg"
             >
               <XMarkIcon className="w-5 h-5" />
@@ -221,16 +221,35 @@ const AnalysisForm = ({ onSubmit, loading }) => {
         <textarea
           name="description"
           value={formData.description}
-          onChange={(e) => setFormData({...formData, description: e.target.value})}
+          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           rows="4"
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none resize-none"
           placeholder="E.g., Head and Shoulders pattern forming on 4H chart..."
         />
       </div>
 
+      // Inside AnalysisForm.jsx, find the Button at the bottom:
+
       <div className="flex justify-end mt-6">
-        <Button type="submit" variant="primary" size="lg" loading={loading} className="w-full md:w-auto">
-          Post Analysis Pair
+        <Button
+          type="submit"
+          variant="primary"
+          size="lg"
+          loading={loading}        // Prop passed to your Button component
+          disabled={loading}       // Prevent double clicking
+          className="w-full md:w-auto flex items-center justify-center"
+        >
+          {loading ? (
+            <>
+              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Posting...
+            </>
+          ) : (
+            'Post Analysis Pair'
+          )}
         </Button>
       </div>
     </form>

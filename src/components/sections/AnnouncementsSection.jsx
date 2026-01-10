@@ -2,13 +2,15 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { announcementAPI } from '../../api/homeApi';
 import AnnouncementForm from '../AnnouncementForm';
 import AnnouncementTable from '../AnnouncementTable';
+import toast from "react-hot-toast";
+
 
 const AnnouncementsSection = () => {
   const [announcements, setAnnouncements] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [formLoading, setFormLoading] = useState(false);
-  
+
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
@@ -17,7 +19,7 @@ const AnnouncementsSection = () => {
     setLoading(true);
     try {
       const res = await announcementAPI.getAll(currentPage);
-      
+
       // Matches your API structure: { announcements: [], total: X, totalPages: Y }
       setAnnouncements(res.announcements || []);
       setTotalPages(res.totalPages || 1);
@@ -40,22 +42,52 @@ const AnnouncementsSection = () => {
     setFormLoading(true);
     try {
       await announcementAPI.create(formData);
+      toast.success("Announcement created successfully");
       setPage(1); // Jump to first page to see the newest announcement
       fetchAnnouncements(1);
     } catch (err) {
-      alert("Error creating announcement: " + err.message);
-    } finally {
+      toast.error(
+        err?.response?.data?.message || "Failed to create announcement"
+      );
+    }
+    finally {
       setFormLoading(false);
     }
   };
+
+  const handleEdit = async (id, updatedData) => {
+    try {
+      await announcementAPI.update(id, {
+        title: updatedData.title,
+        description: updatedData.description,
+        link: updatedData.link,
+        is_active: updatedData.is_active,
+      });
+
+      toast.success("Announcement updated successfully");
+      fetchAnnouncements(page);
+    } catch (err) {
+      toast.error(
+        err?.response?.data?.message || "Failed to update announcement"
+      );
+    }
+  };
+
+
+
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this announcement?')) {
       try {
         await announcementAPI.delete(id);
+        toast.success("Announcement deleted successfully");
+
         fetchAnnouncements(page);
       } catch (err) {
-        alert("Delete failed: " + err.message);
+        toast.error(
+          err?.response?.data?.message || "Failed to delete announcement"
+        );
+
       }
     }
   };
@@ -78,12 +110,14 @@ const AnnouncementsSection = () => {
             Total: {totalItems}
           </span>
         </div>
-        
-        <AnnouncementTable 
-          data={announcements} 
-          loading={loading} 
+
+        <AnnouncementTable
+          data={announcements}
+          loading={loading}
           onDelete={handleDelete}
+          onEdit={handleEdit}
         />
+
 
         {/* Improved Pagination Footer */}
         <div className="bg-gray-50 px-6 py-4 flex items-center justify-between border-t border-gray-200">

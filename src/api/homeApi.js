@@ -9,17 +9,17 @@ export const announcementAPI = {
   },
 
   create: async (data) => {
-    const response = await apiClient.post(`/admin/announcements`, data);
+    const response = await apiClient.post(`/announcements`, data);
     return response.data;
   },
 
   update: async (id, data) => {
-    const response = await apiClient.put(`/admin/announcements/${id}`, data);
+    const response = await apiClient.put(`/announcements/${id}`, data);
     return response.data;
   },
 
   delete: async (id) => {
-    const response = await apiClient.delete(`/admin/announcements/${id}`);
+    const response = await apiClient.delete(`/announcements/${id}`);
     return response.data;
   },
 };
@@ -81,6 +81,19 @@ export const signalAPI = {
 
   deleteSignal: async (id) => {
     const response = await apiClient.delete(`/delete-signal/${id}`);
+    return response.data;
+  },
+
+  updateSignal: async (id, formData) => {
+    const response = await apiClient.put(
+      `/update-signal/${id}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
     return response.data;
   },
 

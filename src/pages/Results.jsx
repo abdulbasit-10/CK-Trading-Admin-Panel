@@ -68,9 +68,18 @@ const Result = () => {
     }
   };
 
-  const handleEdit = (row) => {
-    console.log("Edit row:", row);
-    // open modal later
+  const handleUpdate = async (id, updatedData) => {
+    try {
+      setLoading(true);
+      // Assuming your API has an update method
+      await resultAPI.update(id, updatedData);
+      toast.success("Result updated successfully");
+      fetchResults(); // Refresh data
+    } catch (err) {
+      toast.error("Failed to update result");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -91,7 +100,7 @@ const Result = () => {
 
         <ResultTable
           results={results}
-          onEdit={handleEdit}
+          onUpdate={handleUpdate} // Changed from onEdit to onUpdate
           onDelete={handleDelete}
         />
 

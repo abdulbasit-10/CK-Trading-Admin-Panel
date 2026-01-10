@@ -53,7 +53,7 @@ const AnalysisSection = () => {
   const handleAdd = async (formData) => {
     setFormLoading(true);
     try {
-      await analysisPairAPI.create(formData);
+      await pairAnalysisAPI.create(formData);
       setPage(1); 
       await fetchAnalysis();
       return true;
