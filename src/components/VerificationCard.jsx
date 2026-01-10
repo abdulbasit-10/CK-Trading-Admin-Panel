@@ -174,7 +174,7 @@ const VerificationCard = ({
             onClick={() => onViewImage(verification)}
           >
             <img
-              src={`${import.meta.env.VITE_BASE_URL}/${verification.screenshot_url}`}
+              src={`${verification.screenshot_url}`}
               alt="Payment proof"
               className="w-full h-48 object-cover rounded-lg border"
             />

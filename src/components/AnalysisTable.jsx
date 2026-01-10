@@ -29,7 +29,7 @@ const AnalysisTable = ({ data, onDelete, loading }) => {
           {analysis.graph_image_url && (
             <div className="w-full h-48 bg-gray-100 overflow-hidden">
               <img
-                src={`${import.meta.env.VITE_BASE_URL}${analysis.graph_image_url}`}
+                src={`${analysis.graph_image_url}`}
                 alt={analysis.symbol}
                 className="w-full h-full object-cover"
               />

@@ -50,7 +50,7 @@ const SignalTable = ({ data, onDelete, onUpdate, loading }) => {
                             {/* Media */}
                             {item.image_url && (
                                 <img
-                                    src={`${import.meta.env.VITE_BASE_URL}${item.image_url}`}
+                                    src={`${item.image_url}`}
                                     alt="message"
                                     className="mt-2 rounded-lg max-h-80"
                                 />
