@@ -12,7 +12,7 @@ export const userAPI = {
         return res;
     },
     deleteUser: async (id) => {
-        const res = apiClient.delete(`/admin/dashboard/users/${id}`)
+        const res = apiClient.delete(`/admin/dashboard/delete-user/${id}`)
         return res.data;
     }  ,
     getPartners: async () => {

@@ -73,7 +73,7 @@ const Users = () => {
   const handleDeleteUser = async (id) => {
     if (!window.confirm('Delete this user?')) return;
     try {
-      await userAPI.delete(id);
+      await userAPI.deleteUser(id);
       toast.success('User deleted');
       fetchData();
     } catch (err) {

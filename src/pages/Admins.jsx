@@ -82,7 +82,7 @@ const Admins = () => {
   const handleDeleteAdmin = async (id) => {
     if (window.confirm('Are you sure you want to delete this admin?')) {
       try {
-        await adminAPI.delete(id);
+        await adminAPI.deleteAdmin(id);
         toast.success("Admin removed from system");
         fetchData();
       } catch (err) {

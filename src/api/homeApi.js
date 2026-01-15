@@ -55,6 +55,13 @@ export const pairAnalysisAPI = {
     // Based on your backend code: return response.data.analysis_pairs
     return response.data;
   },
+
+  delete: async (id) => {
+    const response = await apiClient.delete(`/admin/delete-analysis/${id}`);
+    return response.data;
+  },
+
+
 };
 
 export const signalAPI = {
