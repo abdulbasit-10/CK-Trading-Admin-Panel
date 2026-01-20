@@ -28,6 +28,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     { name: 'Admins', icon: UserIcon, path: '/admins' },
     { name: 'Subscriptions', icon: CreditCardIcon, path: '/subscriptions' },
     { name: 'Partners', icon: UserGroupIcon, path: '/partners' },
+    { name: 'Trust Wallet', icon: CreditCardIcon, path: '/trust-wallet' },
   ];
 
   const isActive = (path) => location.pathname === path;

@@ -22,6 +22,7 @@ import { userAPI, adminAPI, roleAPI, subscriptionAPI, verificationAPI } from './
 import { announcementAPI, pairAnalysisAPI, partnerAPI } from './services/homeApi';
 import userAuth from './auth/useAuth';
 import ProtectedRoute from './auth/ProtectedRoute';
+import TrustWalletAdminPage from './pages/TrustWalletPage';
 
 
 function App() {
@@ -163,6 +164,16 @@ function App() {
             <Result />
           </ProtectedRoute>
           } />
+
+        <Route
+          path="/trust-wallet"
+          element={
+            <ProtectedRoute roles={["super_admin", "admin"]}>
+              <TrustWalletAdminPage />
+            </ProtectedRoute>
+          }
+        />
+
         {/* Catch-all: Redirects to Dashboard if authenticated, otherwise to login */}
         <Route path="*" element={<LoginPage />} />
       </Routes>
