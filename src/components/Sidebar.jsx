@@ -29,6 +29,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     { name: 'Subscriptions', icon: CreditCardIcon, path: '/subscriptions' },
     { name: 'Partners', icon: UserGroupIcon, path: '/partners' },
     { name: 'Trust Wallet', icon: CreditCardIcon, path: '/trust-wallet' },
+    { name: 'Tutorial Videos', icon: MegaphoneIcon, path: '/tutorial-videos' },
   ];
 
   const isActive = (path) => location.pathname === path;

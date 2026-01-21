@@ -23,6 +23,7 @@ import { announcementAPI, pairAnalysisAPI, partnerAPI } from './services/homeApi
 import userAuth from './auth/useAuth';
 import ProtectedRoute from './auth/ProtectedRoute';
 import TrustWalletAdminPage from './pages/TrustWalletPage';
+import TutorialVideoPage from './pages/ToturialVideos';
 
 
 function App() {
@@ -170,6 +171,15 @@ function App() {
           element={
             <ProtectedRoute roles={["super_admin", "admin"]}>
               <TrustWalletAdminPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tutorial-videos"
+          element={
+            <ProtectedRoute roles={["admin", "super_admin"]}>
+              <TutorialVideoPage />
             </ProtectedRoute>
           }
         />
