@@ -10,6 +10,7 @@ import {
   CreditCardIcon,
   CheckBadgeIcon,
   XMarkIcon,
+  ClipboardDocumentCheckIcon
 } from '@heroicons/react/24/solid';
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
@@ -20,7 +21,9 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     { name: 'Dashboard', icon: HomeIcon, path: '/' },
     { name: 'Home', icon: MegaphoneIcon, path: '/home' },
     { name: 'Verifications', icon: CheckBadgeIcon, path: '/verifications' },
-    { name: 'Results', icon: CheckBadgeIcon, path: '/results' },
+    { name: 'Results', icon: ClipboardDocumentCheckIcon , path: '/results' },
+    { name: 'Trust Wallet', icon: CreditCardIcon, path: '/trust-wallet' },
+    { name: 'Tutorial Videos', icon: MegaphoneIcon, path: '/tutorial-videos' },
   ];
 
   const roleMenuItems = [
@@ -28,8 +31,6 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     { name: 'Admins', icon: UserIcon, path: '/admins' },
     { name: 'Subscriptions', icon: CreditCardIcon, path: '/subscriptions' },
     { name: 'Partners', icon: UserGroupIcon, path: '/partners' },
-    { name: 'Trust Wallet', icon: CreditCardIcon, path: '/trust-wallet' },
-    { name: 'Tutorial Videos', icon: MegaphoneIcon, path: '/tutorial-videos' },
   ];
 
   const isActive = (path) => location.pathname === path;
