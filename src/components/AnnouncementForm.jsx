@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Button from "./Button";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import apiClient from "../api/client";
+import { toast } from "react-hot-toast";
 
 const AnnouncementForm = () => {
   const [formData, setFormData] = useState({
@@ -30,14 +31,21 @@ const AnnouncementForm = () => {
     setLoading(true);
 
     try {
-      await apiClient.post("/announcements", {
+      const payload = {
         title: formData.title,
-        description: formData.message, // 🔥 backend expects "description"
-        link: formData.link,
+        description: formData.message,
         is_active: formData.is_active,
-      });
+      };
 
-      // Reset form on success
+      // 🔥 Only add link if it exists
+      if (formData.link.trim()) {
+        payload.link = formData.link.trim();
+      }
+
+      await apiClient.post("/announcements", payload);
+
+      toast.success("Announcement created successfully");
+
       setFormData({
         title: "",
         message: "",
@@ -47,10 +55,12 @@ const AnnouncementForm = () => {
       setErrors({});
     } catch (error) {
       console.error("Create announcement failed:", error);
+      toast.error("Failed to create announcement");
     } finally {
       setLoading(false);
     }
   };
+
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -76,9 +86,8 @@ const AnnouncementForm = () => {
             name="title"
             value={formData.title}
             onChange={handleChange}
-            className={`w-full px-4 py-2 border rounded-lg ${
-              errors.title ? "border-red-500" : "border-gray-300"
-            }`}
+            className={`w-full px-4 py-2 border rounded-lg ${errors.title ? "border-red-500" : "border-gray-300"
+              }`}
             placeholder="Announcement title"
           />
           {errors.title && (
@@ -95,9 +104,8 @@ const AnnouncementForm = () => {
             value={formData.message}
             onChange={handleChange}
             rows="4"
-            className={`w-full px-4 py-2 border rounded-lg resize-none ${
-              errors.message ? "border-red-500" : "border-gray-300"
-            }`}
+            className={`w-full px-4 py-2 border rounded-lg resize-none ${errors.message ? "border-red-500" : "border-gray-300"
+              }`}
             placeholder="Announcement message"
           />
           {errors.message && (
