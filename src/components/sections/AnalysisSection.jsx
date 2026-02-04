@@ -3,6 +3,8 @@ import useHomeStore from '../../stores/homeStore';
 import { pairAnalysisAPI } from '../../api/homeApi'; // Corrected import name
 import AnalysisForm from '../AnalysisForm';
 import AnalysisTable from '../AnalysisTable';
+import toast from 'react-hot-toast';
+
 
 const AnalysisSection = () => {
   const { pairAnalysis, loading, setPairAnalysis, setLoading, setError } = useHomeStore();
@@ -15,31 +17,31 @@ const AnalysisSection = () => {
   const [totalItems, setTotalItems] = useState(0); // Added missing state
 
   const fetchAnalysis = useCallback(async () => {
-  setLoading(true);
-  try {
-    const result = await pairAnalysisAPI.getByCategory(categoryFilter, page);
-    
-    
-    console.log("Page: ", result.total_pages)
-    console.log("Fetch Result:", result.analysis_pairs);
+    setLoading(true);
+    try {
+      const result = await pairAnalysisAPI.getByCategory(categoryFilter, page);
 
-    if (result && result.analysis_pairs) {
-      setPairAnalysis(result.analysis_pairs); // This is your array
-      setTotalPages(result.total_pages || 1);
-      setTotalItems(result.total_items || 0);
-    } else {
-      setPairAnalysis([]); // Fallback to empty array
+
+      console.log("Page: ", result.total_pages)
+      console.log("Fetch Result:", result.analysis_pairs);
+
+      if (result && result.analysis_pairs) {
+        setPairAnalysis(result.analysis_pairs); // This is your array
+        setTotalPages(result.total_pages || 1);
+        setTotalItems(result.total_items || 0);
+      } else {
+        setPairAnalysis([]); // Fallback to empty array
+      }
+
+      setError(null);
+    } catch (err) {
+      console.error("Fetch Error:", err);
+      setError(err.message);
+      setPairAnalysis([]); // Essential: prevent 'undefined' on error
+    } finally {
+      setLoading(false);
     }
-    
-    setError(null);
-  } catch (err) {
-    console.error("Fetch Error:", err);
-    setError(err.message);
-    setPairAnalysis([]); // Essential: prevent 'undefined' on error
-  } finally {
-    setLoading(false);
-  }
-}, [categoryFilter, page, setPairAnalysis, setLoading, setError]);
+  }, [categoryFilter, page, setPairAnalysis, setLoading, setError]);
 
   useEffect(() => {
     fetchAnalysis();
@@ -54,7 +56,7 @@ const AnalysisSection = () => {
     setFormLoading(true);
     try {
       await pairAnalysisAPI.create(formData);
-      setPage(1); 
+      setPage(1);
       await fetchAnalysis();
       return true;
     } catch (err) {
@@ -66,15 +68,32 @@ const AnalysisSection = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this analysis?')) {
-      try {
-        await analysisPairAPI.delete(id);
-        fetchAnalysis();
-      } catch (err) {
-        setError(err.message);
-      }
+  if (!window.confirm('Are you sure you want to delete this analysis?')) return;
+
+  const toastId = toast.loading('Deleting analysis...');
+
+  try {
+    await pairAnalysisAPI.delete(id);
+
+    toast.success('Analysis deleted successfully', {
+      id: toastId,
+    });
+
+    // Handle pagination edge case
+    if (pairAnalysis.length === 1 && page > 1) {
+      setPage(prev => prev - 1);
+    } else {
+      await fetchAnalysis();
     }
-  };
+
+  } catch (err) {
+    toast.error(err.message || 'Failed to delete analysis', {
+      id: toastId,
+    });
+    setError(err.message);
+  }
+};
+
 
   return (
     <div className="space-y-6">
