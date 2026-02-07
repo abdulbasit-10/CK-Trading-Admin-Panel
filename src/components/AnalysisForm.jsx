@@ -164,7 +164,7 @@ const AnalysisForm = ({ onSubmit, loading }) => {
         </div>
 
         {/* Status */}
-        <div>
+        {/* <div>
           <label className="block text-sm font-semibold text-gray-700 mb-1">Status</label>
           <select
             name="status"
@@ -175,10 +175,10 @@ const AnalysisForm = ({ onSubmit, loading }) => {
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>
           </select>
-        </div>
+        </div> */}
 
         {/* Scheduled For */}
-        <div>
+        {/* <div>
           <label className="block text-sm font-semibold text-gray-700 mb-1">Scheduled For</label>
           <input
             type="datetime-local"
@@ -187,7 +187,7 @@ const AnalysisForm = ({ onSubmit, loading }) => {
             onChange={(e) => setFormData({ ...formData, scheduled_for: e.target.value })}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm"
           />
-        </div>
+        </div> */}
       </div>
 
       {/* Image Upload Area */}

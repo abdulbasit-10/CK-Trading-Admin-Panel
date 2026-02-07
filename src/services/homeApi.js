@@ -132,16 +132,11 @@ export const pairAnalysisAPI = {
 // FOREX AND CRYPTO SYMBOLS
 export const symbolsAPI = {
   forexPairs: [
-    'EUR/USD', 'GBP/USD', 'USD/JPY', 'USD/CHF', 'AUD/USD',
-    'USD/CAD', 'NZD/USD', 'EUR/GBP', 'EUR/JPY', 'GBP/JPY',
-    'USD/CNY', 'USD/INR', 'USD/MXN', 'USD/SGD', 'USD/HKD'
+    'XAUUSD', 'XAGUSD', 'USOIL', 'EURUSD'
   ],
 
   cryptoPairs: [
-    'BTC/USD', 'ETH/USD', 'XRP/USD', 'ADA/USD', 'SOL/USD',
-    'DOGE/USD', 'POLKADOT/USD', 'LITECOIN/USD', 'CARDANO/USD',
-    'RIPPLE/USD', 'CHAINLINK/USD', 'UNISWAP/USD', 'MATIC/USD',
-    'ARBITRUM/USD', 'OPTIMISM/USD'
+    'BTC', 'ETH', 'SOL', 'SUI'
   ],
 
   getForexPairs: async () => {

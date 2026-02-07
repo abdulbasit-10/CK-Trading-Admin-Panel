@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from "react-hot-toast";
 import Dashboard from './pages/Dashboard';
@@ -24,6 +24,8 @@ import userAuth from './auth/useAuth';
 import ProtectedRoute from './auth/ProtectedRoute';
 import TrustWalletAdminPage from './pages/TrustWalletPage';
 import TutorialVideoPage from './pages/ToturialVideos';
+import { requestNotificationPermission } from './firebase/notifications';
+import { notificationAPI } from './api/notificationApi';
 
 
 function App() {
@@ -34,10 +36,25 @@ function App() {
   const { setSubscriptions } = useSubscriptionStore();
   const { setVerifications } = useVerificationStore();
   const { setAnnouncements, setPairAnalysis } = useHomeStore();
-  const { isAuthenticated, login, userRole } = userAuth(); // Now pulls the correct values
+  const { isAuthenticated, login, userRole, loading } = userAuth(); // Now pulls the correct values
 
+  const sentRef = useRef(false)
 
+  useEffect(() => {
+    if (sentRef.current) return;
+    if (loading || !isAuthenticated) return;
 
+    sentRef.current = true;
+
+    const initNotifications = async () => {
+      const deviceToken = await requestNotificationPermission();
+      if (!deviceToken) return;
+
+      await notificationAPI.sendDeviceToken(deviceToken);
+    };
+
+    initNotifications();
+  }, [loading, isAuthenticated]);
 
   useEffect(() => {
     // Initial data load
@@ -92,6 +109,9 @@ function App() {
     setPairAnalysis,
     isAuthenticated,
   ]);
+
+
+
 
   return (
     <>
@@ -185,7 +205,7 @@ function App() {
         />
 
         {/* Catch-all: Redirects to Dashboard if authenticated, otherwise to login */}
-        <Route path="*" element={<LoginPage />} />
+        {/* <Route path="*" element={<LoginPage />} /> */}
       </Routes>
     </Router>
     </>

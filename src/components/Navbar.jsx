@@ -1,19 +1,22 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { BellIcon, UserCircleIcon, Bars3Icon } from '@heroicons/react/24/solid';
+import { useNotifications } from "../notifications/useNotification";
+
 
 const Navbar = ({ toggleSidebar }) => {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  
+  const {
+    notifications,
+    unreadCount,
+    markAllAsRead,
+  } = useNotifications();
+
+
   // Refs to handle clicking outside to close menus
   const notificationRef = useRef(null);
   const profileRef = useRef(null);
 
-  const notifications = [
-    { id: 1, message: 'New user verification pending', time: '5m ago' },
-    { id: 2, message: 'System update completed', time: '1h ago' },
-    { id: 3, message: 'New subscription request', time: '2h ago' },
-  ];
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -32,7 +35,7 @@ const Navbar = ({ toggleSidebar }) => {
   return (
     <nav className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-30">
       <div className="flex items-center justify-between px-4 md:px-6 py-4 h-16">
-        
+
         {/* LEFT: Mobile Sidebar Toggle */}
         <div className="flex items-center md:hidden">
           <button
@@ -51,19 +54,29 @@ const Navbar = ({ toggleSidebar }) => {
 
         {/* RIGHT: Push everything to the end */}
         <div className="flex items-center justify-end flex-1 space-x-3 md:space-x-4">
-          
+
           {/* Notifications Dropdown */}
           <div className="relative" ref={notificationRef}>
             <button
               onClick={() => {
                 setIsNotificationOpen(!isNotificationOpen);
                 setIsProfileOpen(false);
+
+                if (!isNotificationOpen) {
+                  markAllAsRead();
+                }
               }}
+
               className="relative p-2 hover:bg-gray-100 rounded-lg transition"
               aria-label="Notifications"
             >
               <BellIcon className="w-6 h-6 text-gray-500 hover:text-gray-700" />
-              <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full" />
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                  {unreadCount}
+                </span>
+              )}
+
             </button>
 
             {isNotificationOpen && (
@@ -76,15 +89,25 @@ const Navbar = ({ toggleSidebar }) => {
                     notifications.map((notif) => (
                       <div
                         key={notif.id}
-                        className="p-4 border-b border-gray-50 hover:bg-blue-50 transition cursor-pointer last:border-b-0"
+                        className="p-4 border-b border-gray-50 hover:bg-blue-50 transition cursor-pointer"
                       >
-                        <p className="text-sm text-gray-700 font-medium">{notif.message}</p>
-                        <p className="text-xs text-gray-400 mt-1">{notif.time}</p>
+                        <p className="text-sm text-blue-600 font-bold">
+                          {notif.title}
+                        </p>
+                        <p className="text-sm text-gray-700">
+                          {notif.body} {/* Changed from notif.message to notif.body */}
+                        </p>
+                        <p className="text-xs text-gray-400 mt-1">
+                          {new Date(notif.created_at).toLocaleTimeString()}
+                        </p>
                       </div>
                     ))
                   ) : (
-                    <div className="p-8 text-center text-gray-400 text-sm">No new notifications</div>
+                    <div className="p-8 text-center text-gray-400 text-sm">
+                      No new notifications
+                    </div>
                   )}
+
                 </div>
                 <button className="w-full p-3 text-sm text-blue-600 hover:bg-gray-50 font-semibold border-t border-gray-100">
                   View All Activity
@@ -118,7 +141,7 @@ const Navbar = ({ toggleSidebar }) => {
                   <p className="text-sm font-bold text-gray-800">Admin User</p>
                   <p className="text-xs text-gray-500 truncate">admin@trading.com</p>
                 </div>
-                
+
                 <div className="px-2 pt-2">
                   <button className="flex items-center w-full px-3 py-2 text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-700 rounded-lg transition">
                     <span className="mr-3">👤</span> Profile Settings
