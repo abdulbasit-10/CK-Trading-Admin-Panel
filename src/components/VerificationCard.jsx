@@ -24,10 +24,13 @@ const VerificationCard = ({
 }) => {
   const [isRejecting, setIsRejecting] = useState(false);
   const [rejectComment, setRejectComment] = useState("");
+  const [isApproving, setIsApproving] = useState(false);
+  const [isConfirmingReject, setIsConfirmingReject] = useState(false);
 
   const [planSelection, setPlanSelection] = useState("monthly");
   const [selectedPartnerId, setSelectedPartnerId] = useState("");
   const [partnerCode, setPartnerCode] = useState("");
+
   /* ---------- Handlers ---------- */
   const handleApprove = async () => {
     if (planSelection === "partner" && (!selectedPartnerId || !partnerCode)) {
@@ -35,13 +38,18 @@ const VerificationCard = ({
       return;
     }
 
-    await onApprove({
-      verification_id: verification.verification_id,
-      action: "approved",
-      decided_plan_type: planSelection,
-      partner_id: planSelection === "partner" ? selectedPartnerId : null,
-      partner_user_code: planSelection === "partner" ? partnerCode : null,
-    });
+    setIsApproving(true);
+    try {
+      await onApprove({
+        verification_id: verification.verification_id,
+        action: "approved",
+        decided_plan_type: planSelection,
+        partner_id: planSelection === "partner" ? selectedPartnerId : null,
+        partner_user_code: planSelection === "partner" ? partnerCode : null,
+      });
+    } finally {
+      setIsApproving(false);
+    }
   };
 
   const handleReject = async () => {
@@ -50,14 +58,19 @@ const VerificationCard = ({
       return;
     }
 
-    await onReject({
-      verification_id: verification.verification_id,
-      action: "rejected",
-      comment: rejectComment,
-    });
+    setIsConfirmingReject(true);
+    try {
+      await onReject({
+        verification_id: verification.verification_id,
+        action: "rejected",
+        comment: rejectComment,
+      });
 
-    setIsRejecting(false);
-    setRejectComment("");
+      setIsRejecting(false);
+      setRejectComment("");
+    } finally {
+      setIsConfirmingReject(false);
+    }
   };
 
   const getStatusColor = (status) => {
@@ -107,7 +120,8 @@ const VerificationCard = ({
               <select
                 value={planSelection}
                 onChange={(e) => setPlanSelection(e.target.value)}
-                className="w-full mt-1 px-3 py-2 border rounded-md text-sm"
+                disabled={isApproving}
+                className="w-full mt-1 px-3 py-2 border rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <option value="monthly">Monthly</option>
                 <option value="yearly">Yearly</option>
@@ -128,7 +142,8 @@ const VerificationCard = ({
                       const id = e.target.value;
                       setSelectedPartnerId(id);
                     }}
-                    className="w-full mt-1 px-3 py-2 border rounded-md text-sm"
+                    disabled={isApproving}
+                    className="w-full mt-1 px-3 py-2 border rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <option value="">Select a partner</option>
                     {partners.map((p) => (
@@ -148,7 +163,8 @@ const VerificationCard = ({
                     value={partnerCode}
                     onChange={(e) => setPartnerCode(e.target.value)}
                     placeholder="Enter partner code"
-                    className="w-full mt-1 px-3 py-2 border rounded-md text-sm"
+                    disabled={isApproving}
+                    className="w-full mt-1 px-3 py-2 border rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                   />
                 </div>
               </>
@@ -189,13 +205,20 @@ const VerificationCard = ({
           <div className="space-y-3">
             {!isRejecting ? (
               <div className="flex space-x-3">
-                <Button variant="success" className="flex-1" onClick={handleApprove}>
+                <Button
+                  variant="success"
+                  className="flex-1"
+                  onClick={handleApprove}
+                  loading={isApproving}
+                  disabled={isApproving}
+                >
                   <CheckCircleIcon className="w-4 h-4 mr-1" /> Approve
                 </Button>
                 <Button
                   variant="danger"
                   className="flex-1"
                   onClick={() => setIsRejecting(true)}
+                  disabled={isApproving}
                 >
                   <XCircleIcon className="w-4 h-4 mr-1" /> Reject
                 </Button>
@@ -207,13 +230,23 @@ const VerificationCard = ({
                   onChange={(e) => setRejectComment(e.target.value)}
                   placeholder="Enter reason for rejection..."
                   rows={3}
-                  className="w-full px-3 py-2 border rounded-lg text-sm"
+                  disabled={isConfirmingReject}
+                  className="w-full px-3 py-2 border rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                 />
                 <div className="flex space-x-2">
-                  <Button variant="danger" onClick={handleReject}>
+                  <Button
+                    variant="danger"
+                    onClick={handleReject}
+                    loading={isConfirmingReject}
+                    disabled={isConfirmingReject}
+                  >
                     Confirm Reject
                   </Button>
-                  <Button variant="secondary" onClick={() => setIsRejecting(false)}>
+                  <Button
+                    variant="secondary"
+                    onClick={() => setIsRejecting(false)}
+                    disabled={isConfirmingReject}
+                  >
                     Cancel
                   </Button>
                 </div>
