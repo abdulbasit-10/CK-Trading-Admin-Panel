@@ -58,7 +58,7 @@ const SignalTable = ({ data, onDelete, onUpdate, loading }) => {
 
                             {item.video_url && (
                                 <video
-                                    src={`${import.meta.env.VITE_BASE_URL}${item.video_url}`}
+                                    src={`${item.video_url}`}
                                     controls
                                     className="mt-2 rounded-lg max-h-80"
                                 />
