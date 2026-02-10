@@ -22,6 +22,13 @@ export const announcementAPI = {
     const response = await apiClient.delete(`/announcements/${id}`);
     return response.data;
   },
+
+  deleteAll: async () => {
+    const response = await apiClient.delete(`/announcements/delete/all`);
+    return response.data;
+  },
+
+
 };
 
 
@@ -61,6 +68,12 @@ export const pairAnalysisAPI = {
     return response.data;
   },
 
+  deleteAllByCategory: async (category) => {
+    const response = await apiClient.delete(
+      `/admin/delete-all-analysis?category=${category}`
+    );
+    return response.data;
+  },
 
 };
 
@@ -103,5 +116,12 @@ export const signalAPI = {
     );
     return response.data;
   },
+
+  deleteAllSignals: async () => {
+    const response = await apiClient.delete("/delete-all-signals");
+    return response.data;
+  },
+
+
 
 };

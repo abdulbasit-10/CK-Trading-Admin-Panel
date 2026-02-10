@@ -11,6 +11,8 @@ const AnnouncementsSection = () => {
   const [loading, setLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showDeleteAllConfirm, setShowDeleteAllConfirm] = useState(false);
+
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -108,6 +110,35 @@ const AnnouncementsSection = () => {
     }
   };
 
+  const handleDeleteAll = async () => {
+    const toastId = toast.loading("Deleting all announcements...");
+
+    try {
+      setLoading(true);
+
+      await announcementAPI.deleteAll();
+
+      setAnnouncements([]);
+      setTotalItems(0);
+      setTotalPages(1);
+      setPage(1);
+
+      toast.success("All announcements deleted successfully", {
+        id: toastId,
+      });
+
+      setShowDeleteAllConfirm(false);
+    } catch (err) {
+      toast.error(
+        err?.response?.data?.message || "Failed to delete all announcements",
+        { id: toastId }
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
   return (
     <div className="space-y-6">
       {error && (
@@ -158,6 +189,55 @@ const AnnouncementsSection = () => {
             </button>
           </div>
         </div>
+
+        {/* 🚨 Danger Zone */}
+        <div className="border border-red-300 bg-red-50 rounded-lg p-6 mt-10">
+          <h3 className="text-red-700 font-semibold text-lg mb-2">
+            Danger Zone
+          </h3>
+
+          <p className="text-sm text-red-600 mb-4">
+            This action will permanently delete <b>ALL</b> announcements.
+            This cannot be undone.
+          </p>
+
+          {!showDeleteAllConfirm ? (
+            <button
+              onClick={() => setShowDeleteAllConfirm(true)}
+              disabled={loading || totalItems === 0}
+              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50"
+            >
+              Delete All Announcements
+            </button>
+          ) : (
+            <div className="bg-white border border-red-400 rounded p-4">
+              <p className="text-sm text-gray-800 mb-4">
+                ⚠️ Are you absolutely sure you want to delete <b>ALL</b> announcements?
+                <br />
+                This action is <b>irreversible</b>.
+              </p>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={handleDeleteAll}
+                  disabled={loading}
+                  className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50"
+                >
+                  Yes, Delete Everything
+                </button>
+
+                <button
+                  onClick={() => setShowDeleteAllConfirm(false)}
+                  className="px-4 py-2 border rounded"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+
       </div>
     </div>
   );

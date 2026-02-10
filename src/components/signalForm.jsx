@@ -103,10 +103,10 @@ const SignalForm = ({ editingSignal, onCancelEdit, onSuccess }) => {
     const delta = quill.getContents();
     const rawText = quill.getText().trim();
 
-    if (!rawText) {
-      toast.error("Message cannot be empty");
-      return;
-    }
+    // if (!rawText) {
+    //   toast.error("Message cannot be empty");
+    //   return;
+    // }
 
     try {
       setLoading(true);

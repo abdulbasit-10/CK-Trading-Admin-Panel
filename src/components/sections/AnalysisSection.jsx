@@ -10,6 +10,8 @@ const AnalysisSection = () => {
   const { pairAnalysis, loading, setPairAnalysis, setLoading, setError } = useHomeStore();
   const [categoryFilter, setCategoryFilter] = useState('Forex');
   const [formLoading, setFormLoading] = useState(false);
+  const [showDeleteAllConfirm, setShowDeleteAllConfirm] = useState(false);
+
 
   // Pagination States
   const [page, setPage] = useState(1);
@@ -68,31 +70,60 @@ const AnalysisSection = () => {
   };
 
   const handleDelete = async (id) => {
-  if (!window.confirm('Are you sure you want to delete this analysis?')) return;
+    if (!window.confirm('Are you sure you want to delete this analysis?')) return;
 
-  const toastId = toast.loading('Deleting analysis...');
+    const toastId = toast.loading('Deleting analysis...');
 
-  try {
-    await pairAnalysisAPI.delete(id);
+    try {
+      await pairAnalysisAPI.delete(id);
 
-    toast.success('Analysis deleted successfully', {
-      id: toastId,
-    });
+      toast.success('Analysis deleted successfully', {
+        id: toastId,
+      });
 
-    // Handle pagination edge case
-    if (pairAnalysis.length === 1 && page > 1) {
-      setPage(prev => prev - 1);
-    } else {
-      await fetchAnalysis();
+      // Handle pagination edge case
+      if (pairAnalysis.length === 1 && page > 1) {
+        setPage(prev => prev - 1);
+      } else {
+        await fetchAnalysis();
+      }
+
+    } catch (err) {
+      toast.error(err.message || 'Failed to delete analysis', {
+        id: toastId,
+      });
+      setError(err.message);
     }
+  };
 
-  } catch (err) {
-    toast.error(err.message || 'Failed to delete analysis', {
-      id: toastId,
-    });
-    setError(err.message);
-  }
-};
+  const handleDeleteAll = async () => {
+    const toastId = toast.loading(`Deleting all ${categoryFilter} analysis...`);
+
+    try {
+      setLoading(true);
+
+      await pairAnalysisAPI.deleteAllByCategory(categoryFilter);
+
+      setPairAnalysis([]);
+      setTotalItems(0);
+      setTotalPages(1);
+      setPage(1);
+
+      toast.success(`All ${categoryFilter} analysis deleted`, {
+        id: toastId,
+      });
+
+      setShowDeleteAllConfirm(false);
+    } catch (err) {
+      toast.error(err.message || "Failed to delete all analysis", {
+        id: toastId,
+      });
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
 
   return (
@@ -141,7 +172,57 @@ const AnalysisSection = () => {
               Next
             </button>
           </div>
+
         </div>
+
+        {/* 🚨 Danger Zone */}
+        <div className="border border-red-300 bg-red-50 rounded-lg p-6 mt-10">
+          <h3 className="text-red-700 font-semibold text-lg mb-2">
+            Danger Zone
+          </h3>
+
+          <p className="text-sm text-red-600 mb-4">
+            This will permanently delete <b>ALL</b> analysis entries for the
+            <b> {categoryFilter}</b> category. This action cannot be undone.
+          </p>
+
+          {!showDeleteAllConfirm ? (
+            <button
+              onClick={() => setShowDeleteAllConfirm(true)}
+              disabled={loading || totalItems === 0}
+              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50"
+            >
+              Delete All {categoryFilter} Analysis
+            </button>
+          ) : (
+            <div className="bg-white border border-red-400 rounded p-4">
+              <p className="text-sm text-gray-800 mb-4">
+                ⚠️ Are you sure you want to delete <b>ALL</b> {categoryFilter} analysis?
+                <br />
+                This action is <b>irreversible</b>.
+              </p>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={handleDeleteAll}
+                  disabled={loading}
+                  className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50"
+                >
+                  Yes, Delete Everything
+                </button>
+
+                <button
+                  onClick={() => setShowDeleteAllConfirm(false)}
+                  className="px-4 py-2 border rounded"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+
       </div>
     </div>
   );
