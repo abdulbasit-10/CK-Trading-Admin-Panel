@@ -26,6 +26,7 @@ import TrustWalletAdminPage from './pages/TrustWalletPage';
 import TutorialVideoPage from './pages/ToturialVideos';
 import { requestNotificationPermission } from './firebase/notifications';
 import { notificationAPI } from './api/notificationApi';
+import PrivacyPolicy from './pages/PrivacyPlolicy';
 
 
 function App() {
@@ -115,99 +116,100 @@ function App() {
 
   return (
     <>
-    <Toaster position="top-right" reverseOrder={false} />
-    <Router>
-      <Routes>
+      <Toaster position="top-right" reverseOrder={false} />
+      <Router>
+        <Routes>
 
-        {/* Authentication Routes (Public/Unprotected) */}
-        <Route path='/login' element={
-          isAuthenticated ? (
-            <Navigate to="/" />
-          ) : (<LoginPage onSuccessfulLogin={login} />)
-        } />
-
-        <Route path='/register' element={
-          isAuthenticated ? (
-            <Navigate to="/" />
-          ) : (<RegisterPage onSuccessfulRegistration={() => { }} />)
-        } />
-
-        {/* Protected Admin Routes (FIX 2 applied) */}
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute roles={["admin", "super_admin"]}>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/home"
-          element={
-            <ProtectedRoute roles={["admin", "super_admin"]}>
-              <Home />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/users"
-          element={
-            <ProtectedRoute roles={["admin", "super_admin"]}>
-              <Users />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admins"
-          element={
-            <ProtectedRoute roles={["super_admin"]}>
-              <Admins />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/subscriptions"
-          element={
-            <ProtectedRoute roles={["admin", "super_admin"]} >
-              <Subscriptions />
-            </ProtectedRoute>} />
-        <Route path="/partners" element={<ProtectedRoute roles={["admin", "super_admin"]} >
-          <Partners />
-        </ProtectedRoute>
-        } />
-        <Route path="/verifications" element={<ProtectedRoute roles={["admin", "super_admin"]} >
-          <Verifications />
-        </ProtectedRoute>
-        } />
-        <Route
-          path="/results"
-          element={<ProtectedRoute roles={["admin", "super_admin"]}>
-            <Result />
-          </ProtectedRoute>
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          {/* Authentication Routes (Public/Unprotected) */}
+          <Route path='/login' element={
+            isAuthenticated ? (
+              <Navigate to="/" />
+            ) : (<LoginPage onSuccessfulLogin={login} />)
           } />
 
-        <Route
-          path="/trust-wallet"
-          element={
-            <ProtectedRoute roles={["super_admin", "admin"]}>
-              <TrustWalletAdminPage />
-            </ProtectedRoute>
-          }
-        />
+          <Route path='/register' element={
+            isAuthenticated ? (
+              <Navigate to="/" />
+            ) : (<RegisterPage onSuccessfulRegistration={() => { }} />)
+          } />
 
-        <Route
-          path="/tutorial-videos"
-          element={
-            <ProtectedRoute roles={["admin", "super_admin"]}>
-              <TutorialVideoPage />
+          {/* Protected Admin Routes (FIX 2 applied) */}
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute roles={["admin", "super_admin"]}>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/home"
+            element={
+              <ProtectedRoute roles={["admin", "super_admin"]}>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/users"
+            element={
+              <ProtectedRoute roles={["admin", "super_admin"]}>
+                <Users />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admins"
+            element={
+              <ProtectedRoute roles={["super_admin"]}>
+                <Admins />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/subscriptions"
+            element={
+              <ProtectedRoute roles={["admin", "super_admin"]} >
+                <Subscriptions />
+              </ProtectedRoute>} />
+          <Route path="/partners" element={<ProtectedRoute roles={["admin", "super_admin"]} >
+            <Partners />
+          </ProtectedRoute>
+          } />
+          <Route path="/verifications" element={<ProtectedRoute roles={["admin", "super_admin"]} >
+            <Verifications />
+          </ProtectedRoute>
+          } />
+          <Route
+            path="/results"
+            element={<ProtectedRoute roles={["admin", "super_admin"]}>
+              <Result />
             </ProtectedRoute>
-          }
-        />
+            } />
 
-        {/* Catch-all: Redirects to Dashboard if authenticated, otherwise to login */}
-        {/* <Route path="*" element={<LoginPage />} /> */}
-      </Routes>
-    </Router>
+          <Route
+            path="/trust-wallet"
+            element={
+              <ProtectedRoute roles={["super_admin", "admin"]}>
+                <TrustWalletAdminPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/tutorial-videos"
+            element={
+              <ProtectedRoute roles={["admin", "super_admin"]}>
+                <TutorialVideoPage />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Catch-all: Redirects to Dashboard if authenticated, otherwise to login */}
+          {/* <Route path="*" element={<LoginPage />} /> */}
+        </Routes>
+      </Router>
     </>
   );
 }
