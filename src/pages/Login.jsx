@@ -27,7 +27,7 @@ const LoginPage = () => {
 
       navigate("/", { replace: true });
     } catch (err) {
-      setError(err.message || "Login failed");
+      setError(err.response?.data?.message || err.message || "Login failed");
     } finally {
       setLoading(false);
     }

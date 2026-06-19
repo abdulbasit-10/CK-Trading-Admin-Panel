@@ -74,6 +74,19 @@ apiClient.interceptors.response.use(
     // 3. Handle standard 401s for other protected routes
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
+
+      // If a refresh is already in progress, queue this request and wait
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        })
+          .then((token) => {
+            originalRequest.headers.Authorization = `Bearer ${token}`;
+            return apiClient(originalRequest);
+          })
+          .catch((err) => Promise.reject(err));
+      }
+
       isRefreshing = true;
 
       try {
@@ -85,10 +98,13 @@ apiClient.interceptors.response.use(
         const { accessToken } = response.data;
         setAccessToken(accessToken);
         processQueue(null, accessToken);
+        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return apiClient(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError, null);
         setAccessToken(null);
+        // Force a full logout so the UI reflects the expired session
+        window.dispatchEvent(new CustomEvent("auth:session-expired"));
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

@@ -53,6 +53,14 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     initAuth();
+
+    const handleSessionExpired = () => {
+      setAccessToken(null);
+      setUser(null);
+    };
+
+    window.addEventListener("auth:session-expired", handleSessionExpired);
+    return () => window.removeEventListener("auth:session-expired", handleSessionExpired);
   }, []);
 
   return (
