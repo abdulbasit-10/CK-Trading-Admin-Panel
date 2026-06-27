@@ -27,6 +27,7 @@ import TutorialVideoPage from './pages/ToturialVideos';
 import { requestNotificationPermission } from './firebase/notifications';
 import { notificationAPI } from './api/notificationApi';
 import PrivacyPolicy from './pages/PrivacyPlolicy';
+import Unauthorized from './pages/Unauthorized';
 
 
 function App() {
@@ -37,7 +38,7 @@ function App() {
   const { setSubscriptions } = useSubscriptionStore();
   const { setVerifications } = useVerificationStore();
   const { setAnnouncements, setPairAnalysis } = useHomeStore();
-  const { isAuthenticated, login, userRole, loading } = userAuth(); // Now pulls the correct values
+  const { isAuthenticated, login, loading } = userAuth(); // Now pulls the correct values
 
   const sentRef = useRef(false)
 
@@ -205,6 +206,8 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          <Route path="/unauthorized" element={<Unauthorized />} />
 
           {/* Catch-all: Redirects to Dashboard if authenticated, otherwise to login */}
           {/* <Route path="*" element={<LoginPage />} /> */}

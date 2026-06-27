@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   HomeIcon,
@@ -14,16 +14,12 @@ import {
 } from '@heroicons/react/24/solid';
 import useAuth from '../auth/useAuth';
 
+const ROLE_MENU_STORAGE_KEY = 'sidebar:roleMenuOpen';
+
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { logout } = useAuth();
-  const [isRoleMenuOpen, setIsRoleMenuOpen] = useState(false);
-
-  const handleLogout = async () => {
-    await logout();
-    navigate('/login');
-  };
 
   const mainMenuItems = [
     { name: 'Dashboard', icon: HomeIcon, path: '/' },
@@ -44,11 +40,56 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   const isActive = (path) => location.pathname === path;
   const isRoleMenuActive = roleMenuItems.some((item) => isActive(item.path));
 
+  // Persist the dropdown open state across navigations. The MainLayout
+  // (and therefore this Sidebar) is mounted per-page, so a plain useState
+  // would reset to its initial value every time the admin clicks an item
+  // inside the dropdown. We rehydrate from localStorage and also default
+  // to open whenever the current route belongs to the role menu.
+  const [isRoleMenuOpen, setIsRoleMenuOpen] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    try {
+      const stored = window.localStorage.getItem(ROLE_MENU_STORAGE_KEY);
+      if (stored !== null) return stored === 'true';
+    } catch {
+      // ignore storage access errors
+    }
+    return roleMenuItems.some((item) => location.pathname === item.path);
+  });
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(
+        ROLE_MENU_STORAGE_KEY,
+        isRoleMenuOpen ? 'true' : 'false'
+      );
+    } catch {
+      // ignore storage access errors
+    }
+  }, [isRoleMenuOpen]);
+
+  // Force the dropdown open whenever the admin is sitting on a route that
+  // lives inside it – this way navigation between role-menu pages never
+  // visually collapses the section.
+  const isRoleMenuExpanded = isRoleMenuOpen || isRoleMenuActive;
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/login');
+  };
+
   // Close sidebar on mobile when navigating
   const handleNavClick = () => {
     if (window.innerWidth < 768) {
       setIsOpen(false);
     }
+  };
+
+  // Role-menu links should not collapse the dropdown – only close the
+  // sidebar drawer on mobile.
+  const handleRoleNavClick = (event) => {
+    event.stopPropagation();
+    setIsRoleMenuOpen(true);
+    handleNavClick();
   };
 
   return (
@@ -127,13 +168,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           {/* Role Management Dropdown */}
           <div>
             <button
-              onClick={() => setIsRoleMenuOpen(!isRoleMenuOpen)}
+              onClick={() => setIsRoleMenuOpen(!isRoleMenuExpanded)}
               className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 ${
                 isRoleMenuActive
                   ? 'bg-[#FF9201] text-white shadow-lg'
                   : 'hover:bg-[#6B2496] text-white'
               }`}
-              aria-expanded={isRoleMenuOpen}
+              aria-expanded={isRoleMenuExpanded}
               title={!isOpen ? 'Role Management' : ''}
             >
               <UserGroupIcon className="w-6 h-6 flex-shrink-0" />
@@ -144,7 +185,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                   </span>
                   <ChevronDownIcon
                     className={`w-5 h-5 flex-shrink-0 transition-transform duration-200 ${
-                      isRoleMenuOpen ? 'rotate-180' : ''
+                      isRoleMenuExpanded ? 'rotate-180' : ''
                     }`}
                     aria-hidden="true"
                   />
@@ -153,7 +194,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             </button>
 
             {/* Role Submenu - Expanded */}
-            {isOpen && isRoleMenuOpen && (
+            {isOpen && isRoleMenuExpanded && (
               <div className="mt-2 space-y-1 pl-4 border-l-2 border-purple-400">
                 {roleMenuItems.map((item) => {
                   const Icon = item.icon;
@@ -163,7 +204,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                     <Link
                       key={item.path}
                       to={item.path}
-                      onClick={handleNavClick}
+                      onClick={handleRoleNavClick}
                       className={`flex items-center space-x-3 px-4 py-2 rounded-lg transition-all duration-200 text-sm ${
                         active
                           ? 'bg-[#FF9201] text-white shadow-md'
@@ -179,7 +220,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             )}
 
             {/* Role Menu Popover - Collapsed */}
-            {!isOpen && isRoleMenuOpen && (
+            {!isOpen && isRoleMenuExpanded && (
               <div className="absolute left-20 top-48 bg-white rounded-lg shadow-xl py-2 z-50 w-max">
                 {roleMenuItems.map((item) => {
                   const Icon = item.icon;
@@ -189,7 +230,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                     <Link
                       key={item.path}
                       to={item.path}
-                      onClick={handleNavClick}
+                      onClick={handleRoleNavClick}
                       className={`flex items-center space-x-3 px-4 py-2 transition whitespace-nowrap ${
                         active
                           ? 'bg-amber-100 text-[#4E1A6F]'

@@ -8,5 +8,14 @@ export const notificationAPI = {
         } )
 
         return res;
-    }
+    },
+
+    /**
+     * Fetch the latest persisted notifications for the logged-in admin.
+     * Returns the raw array of notification rows from the backend.
+     */
+    getNotifications: async () => {
+        const res = await apiClient.get("/notifications");
+        return res.data?.data || [];
+    },
 }
