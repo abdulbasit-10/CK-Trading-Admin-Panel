@@ -5,6 +5,10 @@ export const trustWalletApi = {
         const response = await apiClient.get("/trust-wallet");
         return response.data;
     },
+    createCredentials: async (payload) =>{
+        const response = await apiClient.post("/trust-wallet", payload);
+        return response.data;
+    },
     updateCredentials: async (payload) =>{
         const response = await apiClient.put("/trust-wallet", payload);
         return response.data;

@@ -12,12 +12,11 @@ const TrustWalletAdminPage = () => {
         try {
             setLoading(true);
             const res = await trustWalletApi.getCredentials();
-            console.log(res.data);
-
-            setWalletData(res.data);
+            setWalletData(res.data ?? null);
         } catch (err) {
             toast.error("Failed to load trust wallet credentials");
             setWalletData(null);
+            console.log(err);
         } finally {
             setLoading(false);
         }
@@ -26,6 +25,12 @@ const TrustWalletAdminPage = () => {
     useEffect(() => {
         fetchTrustWallet();
     }, []);
+
+    const handleCreate = async (newData) => {
+        await trustWalletApi.createCredentials(newData);
+        toast.success("Trust wallet credentials created");
+        await fetchTrustWallet();
+    };
 
     const handleSave = async (newData) => {
         const payload = {};
@@ -42,6 +47,7 @@ const TrustWalletAdminPage = () => {
         }
 
         await trustWalletApi.updateCredentials(payload);
+        toast.success("Trust wallet credentials updated");
         await fetchTrustWallet();
     };
 
@@ -63,6 +69,7 @@ const TrustWalletAdminPage = () => {
                     data={walletData}
                     loading={loading}
                     onSave={handleSave}
+                    onCreate={handleCreate}
                 />
             </div>
         </MainLayout>
