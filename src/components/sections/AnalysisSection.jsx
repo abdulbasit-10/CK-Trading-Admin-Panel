@@ -138,7 +138,7 @@ const AnalysisSection = () => {
           <select
             value={categoryFilter}
             onChange={handleCategoryChange}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4E1A6F] outline-none"
           >
             <option value="Forex">Forex</option>
             <option value="Crypto">Crypto</option>

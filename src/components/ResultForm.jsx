@@ -50,7 +50,7 @@ const ResultForm = ({ onSubmit, loading }) => {
             placeholder="Result name"
             required
             className="w-full px-4 py-2 border border-gray-300 rounded-lg
-                       focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                       focus:ring-2 focus:ring-[#4E1A6F] focus:border-transparent outline-none"
           />
         </div>
 
@@ -64,7 +64,7 @@ const ResultForm = ({ onSubmit, loading }) => {
             value={formData.category}
             onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg
-                       focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                       focus:ring-2 focus:ring-[#4E1A6F] focus:border-transparent outline-none"
           >
             <option value="Select Category" disabled>
               Select Category
@@ -87,7 +87,7 @@ const ResultForm = ({ onSubmit, loading }) => {
             placeholder="Take Profit"
             required
             className="w-full px-4 py-2 border border-gray-300 rounded-lg
-                       focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                       focus:ring-2 focus:ring-[#4E1A6F] focus:border-transparent outline-none"
           />
         </div>
 
@@ -104,7 +104,7 @@ const ResultForm = ({ onSubmit, loading }) => {
             placeholder="Stop Loss"
             required
             className="w-full px-4 py-2 border border-gray-300 rounded-lg
-                       focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                       focus:ring-2 focus:ring-[#4E1A6F] focus:border-transparent outline-none"
           />
         </div>
 
@@ -121,7 +121,7 @@ const ResultForm = ({ onSubmit, loading }) => {
             placeholder="e.g. 12"
             required
             className="w-full px-4 py-2 border border-gray-300 rounded-lg
-                       focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                       focus:ring-2 focus:ring-[#4E1A6F] focus:border-transparent outline-none"
           />
         </div>
       </div>
@@ -131,8 +131,8 @@ const ResultForm = ({ onSubmit, loading }) => {
         <button
           type="submit"
           disabled={loading}
-          className="inline-flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg
-             hover:bg-blue-700 transition disabled:opacity-50"
+          className="inline-flex items-center gap-2 px-6 py-2 bg-[#FF9201] text-white rounded-lg
+             hover:bg-[#e08200] transition disabled:opacity-50"
         >
           {loading ? "Creating..." : "Create Result"}
         </button>

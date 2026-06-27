@@ -17,7 +17,7 @@ const SignalTable = ({ data, onDelete, onUpdate, loading }) => {
     if (loading) {
         return (
             <div className="flex justify-center items-center h-64">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#4E1A6F]"></div>
             </div>
         );
     }
@@ -74,7 +74,7 @@ const SignalTable = ({ data, onDelete, onUpdate, loading }) => {
                         <div className="flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition">
                             <button
                                 onClick={() => onUpdate(item)}
-                                className="p-1 rounded hover:bg-blue-100 text-blue-600"
+                                className="p-1 rounded hover:bg-purple-100 text-[#4E1A6F]"
                                 title="Edit"
                             >
                                 <PencilSquareIcon className="w-4 h-4" />

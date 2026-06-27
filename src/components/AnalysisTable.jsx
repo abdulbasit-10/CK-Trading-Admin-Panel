@@ -5,7 +5,7 @@ const AnalysisTable = ({ data, onDelete, loading }) => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#4E1A6F]"></div>
       </div>
     );
   }
@@ -50,7 +50,7 @@ const AnalysisTable = ({ data, onDelete, loading }) => {
               </span>
             </div>
 
-            <span className="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded mb-3">
+            <span className="inline-block px-2 py-1 bg-purple-100 text-purple-800 text-xs font-medium rounded mb-3">
               {analysis.category}
             </span>
 

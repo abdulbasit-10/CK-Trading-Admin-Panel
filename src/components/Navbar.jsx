@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { BellIcon, UserCircleIcon, Bars3Icon } from '@heroicons/react/24/solid';
+import { useNavigate } from 'react-router-dom';
 import { useNotifications } from "../notifications/useNotification";
+import useAuth from '../auth/useAuth';
 
 
 const Navbar = ({ toggleSidebar }) => {
+  const navigate = useNavigate();
+  const { logout } = useAuth();
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const {
@@ -89,9 +93,9 @@ const Navbar = ({ toggleSidebar }) => {
                     notifications.map((notif) => (
                       <div
                         key={notif.id}
-                        className="p-4 border-b border-gray-50 hover:bg-blue-50 transition cursor-pointer"
+                        className="p-4 border-b border-gray-50 hover:bg-purple-50 transition cursor-pointer"
                       >
-                        <p className="text-sm text-blue-600 font-bold">
+                        <p className="text-sm text-[#4E1A6F] font-bold">
                           {notif.title}
                         </p>
                         <p className="text-sm text-gray-700">
@@ -109,7 +113,7 @@ const Navbar = ({ toggleSidebar }) => {
                   )}
 
                 </div>
-                <button className="w-full p-3 text-sm text-blue-600 hover:bg-gray-50 font-semibold border-t border-gray-100">
+                <button className="w-full p-3 text-sm text-[#4E1A6F] hover:bg-gray-50 font-semibold border-t border-gray-100">
                   View All Activity
                 </button>
               </div>
@@ -132,7 +136,7 @@ const Navbar = ({ toggleSidebar }) => {
                 <p className="text-sm font-bold text-gray-800 leading-none">Admin User</p>
                 <p className="text-[10px] uppercase tracking-wider font-bold text-gray-400 mt-1">Administrator</p>
               </div>
-              <UserCircleIcon className="w-9 h-9 text-blue-500" />
+              <UserCircleIcon className="w-9 h-9 text-[#4E1A6F]" />
             </button>
 
             {isProfileOpen && (
@@ -143,20 +147,19 @@ const Navbar = ({ toggleSidebar }) => {
                 </div>
 
                 <div className="px-2 pt-2">
-                  <button className="flex items-center w-full px-3 py-2 text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-700 rounded-lg transition">
-                    <span className="mr-3">👤</span> Profile Settings
+                  <button className="flex items-center w-full px-3 py-2 text-sm text-gray-600 hover:bg-purple-50 hover:text-[#4E1A6F] rounded-lg transition"> Profile Settings
                   </button>
-                  <button className="flex items-center w-full px-3 py-2 text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-700 rounded-lg transition">
-                    <span className="mr-3">⚙️</span> Preferences
+                  <button className="flex items-center w-full px-3 py-2 text-sm text-gray-600 hover:bg-purple-50 hover:text-[#4E1A6F] rounded-lg transition"> Preferences
                   </button>
-                  <button className="flex items-center w-full px-3 py-2 text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-700 rounded-lg transition border-b border-gray-50">
-                    <span className="mr-3">🔐</span> Security
+                  <button className="flex items-center w-full px-3 py-2 text-sm text-gray-600 hover:bg-purple-50 hover:text-[#4E1A6F] rounded-lg transition border-b border-gray-50"> Security
                   </button>
                 </div>
 
                 <div className="px-2 pt-2">
-                  <button className="flex items-center w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition font-semibold">
-                    <span className="mr-3">🚪</span> Logout
+                  <button
+                    onClick={async () => { await logout(); navigate('/login'); }}
+                    className="flex items-center w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition font-semibold"
+                  > Logout
                   </button>
                 </div>
               </div>

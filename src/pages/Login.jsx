@@ -78,7 +78,7 @@ const LoginPage = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2 text-white bg-indigo-600 rounded-md disabled:opacity-50"
+            className="w-full py-2 text-white bg-[#FF9201] rounded-md disabled:opacity-50"
           >
             {loading ? "Logging in..." : "Log In"}
           </button>

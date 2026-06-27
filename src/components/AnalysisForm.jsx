@@ -122,7 +122,7 @@ const AnalysisForm = ({ onSubmit, loading }) => {
   return (
     <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-6 mb-6 border border-gray-100">
       <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-        <PlusIcon className="w-6 h-6 text-blue-600" />
+        <PlusIcon className="w-6 h-6 text-[#4E1A6F]" />
         Create Pair Analysis
       </h2>
 
@@ -134,7 +134,7 @@ const AnalysisForm = ({ onSubmit, loading }) => {
             name="category"
             value={formData.category}
             onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4E1A6F] outline-none"
           >
             <option value="Forex">Forex</option>
             <option value="Crypto">Crypto</option>
@@ -150,12 +150,12 @@ const AnalysisForm = ({ onSubmit, loading }) => {
             onChange={handleSymbolSearch}
             onFocus={() => setShowSymbolDropdown(true)}
             placeholder="Search symbol..."
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4E1A6F] outline-none"
           />
           {showSymbolDropdown && filteredSymbols.length > 0 && (
             <div className="absolute z-20 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-xl max-h-48 overflow-y-auto">
               {filteredSymbols.map((s, idx) => (
-                <button key={idx} type="button" onClick={() => handleSymbolSelect(s)} className="w-full text-left px-4 py-2 hover:bg-blue-50 transition text-sm">
+                <button key={idx} type="button" onClick={() => handleSymbolSelect(s)} className="w-full text-left px-4 py-2 hover:bg-purple-50 transition text-sm">
                   {s}
                 </button>
               ))}
@@ -170,7 +170,7 @@ const AnalysisForm = ({ onSubmit, loading }) => {
             name="status"
             value={formData.status}
             onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4E1A6F] outline-none"
           >
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>
@@ -185,7 +185,7 @@ const AnalysisForm = ({ onSubmit, loading }) => {
             name="scheduled_for"
             value={formData.scheduled_for}
             onChange={(e) => setFormData({ ...formData, scheduled_for: e.target.value })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4E1A6F] outline-none text-sm"
           />
         </div> */}
       </div>
@@ -195,7 +195,7 @@ const AnalysisForm = ({ onSubmit, loading }) => {
         <label className="block text-sm font-semibold text-gray-700 mb-2">Technical Chart Image</label>
         {formData.graph_image_preview ? (
           <div className="relative inline-block group">
-            <img src={formData.graph_image_preview} alt="Preview" className="max-w-md h-64 object-contain rounded-lg border-2 border-blue-100 bg-gray-50" />
+            <img src={formData.graph_image_preview} alt="Preview" className="max-w-md h-64 object-contain rounded-lg border-2 border-purple-100 bg-gray-50" />
             <button
               type="button"
               onClick={() => setFormData({ ...formData, graph_image: null, graph_image_preview: '' })}
@@ -205,7 +205,7 @@ const AnalysisForm = ({ onSubmit, loading }) => {
             </button>
           </div>
         ) : (
-          <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 hover:border-blue-400 transition">
+          <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 hover:border-purple-400 transition">
             <div className="flex flex-col items-center justify-center pt-5 pb-6">
               <PhotoIcon className="w-10 h-10 text-gray-400 mb-2" />
               <p className="text-sm text-gray-600">Click to upload chart (Max 5MB)</p>
@@ -223,7 +223,7 @@ const AnalysisForm = ({ onSubmit, loading }) => {
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           rows="4"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none resize-none"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4E1A6F] outline-none resize-none"
           placeholder="E.g., Head and Shoulders pattern forming on 4H chart..."
         />
       </div>

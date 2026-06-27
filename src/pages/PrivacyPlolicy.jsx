@@ -10,7 +10,7 @@ const PrivacyPolicy = () => {
       <div className="max-w-3xl mx-auto mb-6">
         <button 
           onClick={() => navigate(-1)}
-          className="text-sm font-medium text-slate-500 hover:text-blue-600 flex items-center transition-colors"
+          className="text-sm font-medium text-slate-500 hover:text-[#4E1A6F] flex items-center transition-colors"
         >
           ← Back to App
         </button>
@@ -33,21 +33,21 @@ const PrivacyPolicy = () => {
           {/* 1. Data Collection */}
           <div>
             <h2 className="text-xl font-bold text-slate-800 mb-4 flex items-center">
-              <span className="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mr-3 text-sm">1</span>
+              <span className="w-8 h-8 bg-purple-100 text-[#4E1A6F] rounded-full flex items-center justify-center mr-3 text-sm">1</span>
               Information We Collect
             </h2>
             <div className="bg-slate-50 rounded-xl p-5 border border-slate-100">
               <ul className="space-y-3">
                 <li className="flex gap-3">
-                  <span className="text-blue-500 font-bold">•</span>
+                  <span className="text-[#4E1A6F] font-bold">•</span>
                   <span><strong>Account Information:</strong> Name, email address, and authentication credentials provided during registration.</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="text-blue-500 font-bold">•</span>
+                  <span className="text-[#4E1A6F] font-bold">•</span>
                   <span><strong>Device Identifiers:</strong> We collect push notification tokens (FCM/Device tokens) to provide real-time updates and security alerts.</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="text-blue-500 font-bold">•</span>
+                  <span className="text-[#4E1A6F] font-bold">•</span>
                   <span><strong>Usage Data:</strong> Basic technical logs including app version and operating system to ensure compatibility and security.</span>
                 </li>
               </ul>
@@ -74,7 +74,7 @@ const PrivacyPolicy = () => {
           {/* 3. Push Notifications */}
           <div>
             <h2 className="text-xl font-bold text-slate-800 mb-4 flex items-center">
-              <span className="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mr-3 text-sm">3</span>
+              <span className="w-8 h-8 bg-purple-100 text-[#4E1A6F] rounded-full flex items-center justify-center mr-3 text-sm">3</span>
               Push Notifications
             </h2>
             <p>
@@ -85,7 +85,7 @@ const PrivacyPolicy = () => {
           {/* 4. Security */}
           <div>
             <h2 className="text-xl font-bold text-slate-800 mb-4 flex items-center">
-              <span className="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mr-3 text-sm">4</span>
+              <span className="w-8 h-8 bg-purple-100 text-[#4E1A6F] rounded-full flex items-center justify-center mr-3 text-sm">4</span>
               Security Measures
             </h2>
             <p>
@@ -99,7 +99,7 @@ const PrivacyPolicy = () => {
             <p className="text-sm">
               If you have any questions about this Privacy Policy or our data practices, please reach out to:
             </p>
-            <div className="mt-4 p-4 bg-blue-600 rounded-lg text-white">
+            <div className="mt-4 p-4 bg-[#FF9201] rounded-lg text-white">
               <p className="font-semibold text-sm opacity-90">Support Email:</p>
               <p className="text-lg font-mono">Mkalitrader@gmail.com</p>
             </div>

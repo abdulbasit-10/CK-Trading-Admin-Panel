@@ -126,7 +126,7 @@ const AnnouncementForm = ({ onSubmit, loading }) => {
               name="is_active"
               checked={formData.is_active}
               onChange={handleChange}
-              className="w-4 h-4 text-blue-600 rounded"
+              className="w-4 h-4 text-[#4E1A6F] rounded"
             />
             <span className="text-sm font-medium text-gray-700">
               Active

@@ -61,7 +61,7 @@ const PartnerForm = ({ onSubmit, loading }) => {
             name="partner_name"
             value={formData.partner_name}
             onChange={handleChange}
-            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${
+            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-[#4E1A6F] outline-none ${
               errors.partner_name ? 'border-red-500' : 'border-gray-300'
             }`}
             placeholder="Partner Name"
@@ -79,7 +79,7 @@ const PartnerForm = ({ onSubmit, loading }) => {
             name="partner_code"
             value={formData.partner_code}
             onChange={handleChange}
-            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${
+            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-[#4E1A6F] outline-none ${
               errors.partner_code ? 'border-red-500' : 'border-gray-300'
             }`}
             placeholder="PARTNER001"
@@ -97,7 +97,7 @@ const PartnerForm = ({ onSubmit, loading }) => {
             name="partner_link"
             value={formData.partner_link}
             onChange={handleChange}
-            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${
+            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-[#4E1A6F] outline-none ${
               errors.partner_link ? 'border-red-500' : 'border-gray-300'
             }`}
             placeholder="https://partnerlink.com"

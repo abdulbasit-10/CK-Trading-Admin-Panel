@@ -5,7 +5,7 @@ const Table = ({ columns, data, onEdit, onDelete, onView, loading }) => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#4E1A6F]"></div>
       </div>
     );
   }
@@ -52,7 +52,7 @@ const Table = ({ columns, data, onEdit, onDelete, onView, loading }) => {
                   {onView && (
                     <button
                       onClick={() => onView(row)}
-                      className="p-2 hover:bg-blue-100 rounded-lg transition text-blue-600"
+                      className="p-2 hover:bg-purple-100 rounded-lg transition text-[#4E1A6F]"
                       title="View"
                     >
                       <EyeIcon className="w-4 h-4" />

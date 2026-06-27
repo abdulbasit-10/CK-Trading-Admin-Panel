@@ -31,7 +31,7 @@ const Home = () => {
               onClick={() => setActiveTab(tab.id)}
               className={`px-4 py-2 font-medium transition border-b-2 ${
                 activeTab === tab.id
-                  ? 'border-blue-600 text-blue-600'
+                  ? 'border-[#4E1A6F] text-[#4E1A6F]'
                   : 'border-transparent text-gray-600 hover:text-gray-900'
               }`}
             >

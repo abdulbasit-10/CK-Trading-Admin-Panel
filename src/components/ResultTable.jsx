@@ -49,7 +49,7 @@ const ResultTable = ({ results = [], onUpdate, onDelete }) => {
             const isEditing = editingId === item.result_id;
 
             return (
-              <tr key={item.result_id} className={isEditing ? "bg-blue-50/50" : "hover:bg-gray-50 transition-colors"}>
+              <tr key={item.result_id} className={isEditing ? "bg-purple-50/50" : "hover:bg-gray-50 transition-colors"}>
                 {/* Name - Now Editable */}
                 <td className="px-4 py-3">
                   {isEditing ? (
@@ -57,7 +57,7 @@ const ResultTable = ({ results = [], onUpdate, onDelete }) => {
                       name="name"
                       value={editData.name}
                       onChange={handleInputChange}
-                      className="w-full border border-blue-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="w-full border border-purple-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-[#4E1A6F]"
                     />
                   ) : (
                     <span className="font-medium text-gray-900">{item.name}</span>
@@ -70,7 +70,7 @@ const ResultTable = ({ results = [], onUpdate, onDelete }) => {
                       name="category"
                       value={editData.category}
                       onChange={handleInputChange}
-                      className="w-full border border-blue-300 rounded px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="w-full border border-purple-300 rounded px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-[#4E1A6F]"
                     >
                       <option value="Forex">Forex</option>
                       <option value="Crypto">Crypto</option>
@@ -88,7 +88,7 @@ const ResultTable = ({ results = [], onUpdate, onDelete }) => {
                       type="number"
                       value={editData.tp}
                       onChange={handleInputChange}
-                      className="w-20 border border-blue-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="w-20 border border-purple-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-[#4E1A6F]"
                     />
                   ) : (item.tp)}
                 </td>
@@ -100,7 +100,7 @@ const ResultTable = ({ results = [], onUpdate, onDelete }) => {
                       type="number"
                       value={editData.sl}
                       onChange={handleInputChange}
-                      className="w-20 border border-blue-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="w-20 border border-purple-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-[#4E1A6F]"
                     />
                   ) : (item.sl)}
                 </td>
@@ -112,7 +112,7 @@ const ResultTable = ({ results = [], onUpdate, onDelete }) => {
                       type="number"
                       value={editData.total_wins}
                       onChange={handleInputChange}
-                      className="w-20 border border-blue-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="w-20 border border-purple-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-[#4E1A6F]"
                     />
                   ) : (item.total_wins)}
                 </td>
@@ -145,7 +145,7 @@ const ResultTable = ({ results = [], onUpdate, onDelete }) => {
                         <button
                           onClick={() => startEdit(item)}
                           title="Edit Row"
-                          className="p-1.5 text-blue-600 hover:bg-blue-100 rounded-full transition-colors"
+                          className="p-1.5 text-[#4E1A6F] hover:bg-purple-100 rounded-full transition-colors"
                         >
                           <Pencil size={18} />
                         </button>

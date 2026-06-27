@@ -8,7 +8,7 @@ const EditableTable = ({ columns, data, onEdit, onDelete, onCancel, loading }) =
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#4E1A6F]"></div>
       </div>
     );
   }
@@ -68,7 +68,7 @@ const EditableTable = ({ columns, data, onEdit, onDelete, onCancel, loading }) =
             <tr
               key={row.user_id}
               className={`border-b border-gray-200 transition ${
-                isEditing(row.user_id) ? 'bg-blue-50' : 'hover:bg-gray-50'
+                isEditing(row.user_id) ? 'bg-purple-50' : 'hover:bg-gray-50'
               }`}
             >
               {columns.map((column) => (
@@ -80,7 +80,7 @@ const EditableTable = ({ columns, data, onEdit, onDelete, onCancel, loading }) =
                         <select
                           value={editedData[column.key] || ''}
                           onChange={(e) => handleChange(column.key, e.target.value)}
-                          className="w-full px-2 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 outline-none text-sm"
+                          className="w-full px-2 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-[#4E1A6F] outline-none text-sm"
                         >
                           {column.options?.map((opt) => (
                             <option key={opt.value} value={opt.value}>
@@ -93,14 +93,14 @@ const EditableTable = ({ columns, data, onEdit, onDelete, onCancel, loading }) =
                           type="checkbox"
                           checked={editedData[column.key] || false}
                           onChange={(e) => handleChange(column.key, e.target.checked)}
-                          className="w-4 h-4 text-blue-600 rounded"
+                          className="w-4 h-4 text-[#4E1A6F] rounded"
                         />
                       ) : (
                         <input
                           type={column.type || 'text'}
                           value={editedData[column.key] || ''}
                           onChange={(e) => handleChange(column.key, e.target.value)}
-                          className="w-full px-2 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 outline-none text-sm"
+                          className="w-full px-2 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-[#4E1A6F] outline-none text-sm"
                         />
                       )
                     ) : (

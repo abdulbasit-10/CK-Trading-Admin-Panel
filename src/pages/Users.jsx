@@ -103,7 +103,7 @@ const Users = () => {
         })),
       ],
       render: (partnerId) => (
-        <span className="px-3 py-1 rounded-full bg-indigo-100 text-indigo-800">
+        <span className="px-3 py-1 rounded-full bg-purple-100 text-purple-800">
           {getPartnerName(partnerId)}
         </span>
       ),

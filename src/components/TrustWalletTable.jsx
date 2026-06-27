@@ -17,7 +17,7 @@ const TrustWalletTable = ({ data, loading, onSave }) => {
   if (loading) {
     return (
       <div className="flex justify-center py-12">
-        <div className="animate-spin h-8 w-8 border-b-2 border-blue-600 rounded-full" />
+        <div className="animate-spin h-8 w-8 border-b-2 border-[#4E1A6F] rounded-full" />
       </div>
     );
   }
@@ -91,7 +91,7 @@ const TrustWalletTable = ({ data, loading, onSave }) => {
                     onChange={(e) =>
                       handleChange(row.key, e.target.value)
                     }
-                    className="w-full px-2 py-1 border rounded focus:ring-2 focus:ring-blue-500 outline-none text-sm"
+                    className="w-full px-2 py-1 border rounded focus:ring-2 focus:ring-[#4E1A6F] outline-none text-sm"
                   />
                 ) : (
                   <span className="text-sm text-gray-700 break-all">
@@ -128,7 +128,7 @@ const TrustWalletTable = ({ data, loading, onSave }) => {
           <button
             onClick={save}
             disabled={saving}
-            className="px-4 py-2 text-sm rounded bg-blue-600 text-white hover:bg-blue-700 flex items-center gap-1"
+            className="px-4 py-2 text-sm rounded bg-[#FF9201] text-white hover:bg-[#e08200] flex items-center gap-1"
           >
             <CheckIcon className="w-4 h-4" />
             {saving ? "Saving..." : "Save"}

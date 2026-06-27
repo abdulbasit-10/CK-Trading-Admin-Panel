@@ -89,7 +89,7 @@ const RegisterPage = ({ onSuccessfulRegistration, isAdminCreatingUser = false })
               onChange={(e) => setName(e.target.value)}
               required
               disabled={loading}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-gray-50"
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E1A6F] focus:border-indigo-500 disabled:bg-gray-50"
             />
           </div>
           
@@ -103,7 +103,7 @@ const RegisterPage = ({ onSuccessfulRegistration, isAdminCreatingUser = false })
               onChange={(e) => setEmail(e.target.value)}
               required
               disabled={loading}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-gray-50"
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E1A6F] focus:border-indigo-500 disabled:bg-gray-50"
             />
           </div>
           
@@ -117,7 +117,7 @@ const RegisterPage = ({ onSuccessfulRegistration, isAdminCreatingUser = false })
               onChange={(e) => setPassword(e.target.value)}
               required
               disabled={loading}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-gray-50"
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E1A6F] focus:border-indigo-500 disabled:bg-gray-50"
             />
           </div>
 
@@ -131,7 +131,7 @@ const RegisterPage = ({ onSuccessfulRegistration, isAdminCreatingUser = false })
                       onChange={(e) => setTargetRole(e.target.value)}
                       required
                       disabled={loading}
-                      className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-gray-50"
+                      className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E1A6F] focus:border-indigo-500 disabled:bg-gray-50"
                   >
                       <option value="admin">Admin</option>
                       <option value="user">Standard User (Staff)</option>
@@ -144,7 +144,7 @@ const RegisterPage = ({ onSuccessfulRegistration, isAdminCreatingUser = false })
           <button 
             type="submit" 
             disabled={loading} 
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#FF9201] hover:bg-[#e08200] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4E1A6F] transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Registering...' : 'Register'}
           </button>

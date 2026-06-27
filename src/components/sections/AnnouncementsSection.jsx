@@ -154,7 +154,7 @@ const AnnouncementsSection = () => {
           <h2 className="text-xl font-bold text-gray-800">
             Live Announcements
           </h2>
-          <span className="text-sm bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
+          <span className="text-sm bg-purple-100 text-[#4E1A6F] px-3 py-1 rounded-full">
             Total: {totalItems}
           </span>
         </div>

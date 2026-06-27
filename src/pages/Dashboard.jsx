@@ -52,7 +52,7 @@ const Dashboard = () => {
           {stats.map((stat, idx) => {
             const Icon = stat.icon;
             const colorClasses = {
-              blue: "bg-blue-50 border-blue-200",
+              blue: "bg-purple-50 border-purple-200",
               green: "bg-green-50 border-green-200",
             };
 
@@ -127,7 +127,7 @@ const Dashboard = () => {
                     </p>
                     <p className="text-sm text-gray-500">{admin.email}</p>
                   </div>
-                  <span className="px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                  <span className="px-2 py-1 rounded text-xs font-medium bg-purple-100 text-purple-800">
                     {admin.role_name}
                   </span>
                 </div>

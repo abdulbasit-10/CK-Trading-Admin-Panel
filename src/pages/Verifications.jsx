@@ -130,7 +130,7 @@ const Verifications = () => {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4E1A6F] outline-none"
             >
               <option value="all">All</option>
               <option value="pending">Pending</option>
@@ -143,7 +143,7 @@ const Verifications = () => {
         {/* Verifications Grid */}
         {loading ? (
           <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#4E1A6F]" />
           </div>
         ) : verifications.length === 0 ? (
           <div className="bg-white rounded-lg shadow p-12 text-center">

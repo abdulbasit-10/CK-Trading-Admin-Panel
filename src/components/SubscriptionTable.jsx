@@ -36,7 +36,7 @@ const SubscriptionTable = ({
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#4E1A6F]"></div>
       </div>
     );
   }
@@ -192,7 +192,7 @@ const SubscriptionTable = ({
                       }
                     />
                   ) : (
-                    <span className="font-mono text-blue-700">
+                    <span className="font-mono text-[#4E1A6F]">
                       {sub.partner_user_code || "—"}
                     </span>
                   )}

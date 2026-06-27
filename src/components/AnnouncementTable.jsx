@@ -8,7 +8,7 @@ const AnnouncementTable = ({ data, onEdit, onDelete, loading }) => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#4E1A6F]"></div>
       </div>
     );
   }
@@ -49,8 +49,8 @@ const AnnouncementTable = ({ data, onEdit, onDelete, loading }) => {
           key={announcement.announcement_id}
           className={`border rounded-lg p-5 transition shadow-sm ${
             isEditing(announcement.announcement_id)
-              ? 'bg-blue-50 border-blue-300 ring-1 ring-blue-300'
-              : 'bg-white border-gray-200 hover:border-blue-200'
+              ? 'bg-purple-50 border-purple-300 ring-1 ring-purple-300'
+              : 'bg-white border-gray-200 hover:border-purple-200'
           }`}
         >
           {isEditing(announcement.announcement_id) ? (
@@ -60,7 +60,7 @@ const AnnouncementTable = ({ data, onEdit, onDelete, loading }) => {
                 type="text"
                 value={editedData.title || ''}
                 onChange={(e) => handleChange('title', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none font-semibold"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4E1A6F] outline-none font-semibold"
               />
               
               <label className="block text-xs font-bold text-gray-500 uppercase">Description</label>
@@ -68,7 +68,7 @@ const AnnouncementTable = ({ data, onEdit, onDelete, loading }) => {
                 value={editedData.description || ''}
                 onChange={(e) => handleChange('description', e.target.value)}
                 rows="3"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none resize-none"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4E1A6F] outline-none resize-none"
               />
 
               <label className="block text-xs font-bold text-gray-500 uppercase">External Link</label>
@@ -77,7 +77,7 @@ const AnnouncementTable = ({ data, onEdit, onDelete, loading }) => {
                 placeholder="https://..."
                 value={editedData.link || ''}
                 onChange={(e) => handleChange('link', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4E1A6F] outline-none text-sm"
               />
 
               <div className="flex items-center justify-between pt-2">
@@ -87,7 +87,7 @@ const AnnouncementTable = ({ data, onEdit, onDelete, loading }) => {
                     id={`active-${announcement.announcement_id}`}
                     checked={editedData.is_active || false}
                     onChange={(e) => handleChange('is_active', e.target.checked)}
-                    className="w-4 h-4 text-blue-600 rounded cursor-pointer"
+                    className="w-4 h-4 text-[#4E1A6F] rounded cursor-pointer"
                   />
                   <label htmlFor={`active-${announcement.announcement_id}`} className="text-sm font-medium text-gray-700 cursor-pointer">
                     Active on Mobile App
@@ -104,7 +104,7 @@ const AnnouncementTable = ({ data, onEdit, onDelete, loading }) => {
                   </button>
                   <button
                     onClick={handleSave}
-                    className="flex items-center space-x-1 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 rounded-md transition text-white text-sm"
+                    className="flex items-center space-x-1 px-3 py-1.5 bg-[#FF9201] hover:bg-[#e08200] rounded-md transition text-white text-sm"
                   >
                     <CheckIcon className="w-4 h-4" />
                     <span>Save Changes</span>
@@ -141,7 +141,7 @@ const AnnouncementTable = ({ data, onEdit, onDelete, loading }) => {
                         href={announcement.link} 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="flex items-center space-x-1 text-xs font-medium text-blue-600 hover:text-blue-800 bg-blue-50 px-2 py-1 rounded"
+                        className="flex items-center space-x-1 text-xs font-medium text-[#4E1A6F] hover:text-purple-800 bg-purple-50 px-2 py-1 rounded"
                       >
                         <LinkIcon className="w-3 h-3" />
                         <span className="truncate max-w-[200px]">{announcement.link}</span>
@@ -156,7 +156,7 @@ const AnnouncementTable = ({ data, onEdit, onDelete, loading }) => {
                 <div className="flex flex-col space-y-2 ml-4">
                   <button
                     onClick={() => handleEdit(announcement)}
-                    className="p-2 hover:bg-blue-100 rounded-lg transition text-blue-600 border border-transparent hover:border-blue-200"
+                    className="p-2 hover:bg-purple-100 rounded-lg transition text-[#4E1A6F] border border-transparent hover:border-purple-200"
                     title="Edit Announcement"
                   >
                     <PencilIcon className="w-4 h-4" />

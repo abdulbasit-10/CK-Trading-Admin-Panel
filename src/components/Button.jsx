@@ -12,7 +12,7 @@ const Button = ({
   const baseStyles = 'font-medium rounded-lg transition duration-200 flex items-center justify-center space-x-2';
 
   const variants = {
-    primary: 'bg-blue-600 text-white hover:bg-blue-700 disabled:bg-blue-400',
+    primary: 'bg-[#FF9201] text-white hover:bg-[#e08200] disabled:bg-[#FFB84D]',
     secondary: 'bg-gray-200 text-gray-800 hover:bg-gray-300 disabled:bg-gray-100',
     danger: 'bg-red-600 text-white hover:bg-red-700 disabled:bg-red-400',
     success: 'bg-green-600 text-white hover:bg-green-700 disabled:bg-green-400',

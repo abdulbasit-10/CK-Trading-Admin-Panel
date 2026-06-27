@@ -5,7 +5,7 @@ export default function LoadingScreen() {
     <div className="flex h-screen w-full items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100">
       {/* Animated gradient background elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-blue-200/20 blur-3xl"></div>
+        <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-purple-200/20 blur-3xl"></div>
         <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-slate-300/20 blur-3xl"></div>
       </div>
 
@@ -56,7 +56,7 @@ export default function LoadingScreen() {
           {[0, 1, 2].map((i) => (
             <div
               key={i}
-              className="h-1.5 w-1.5 rounded-full bg-blue-400"
+              className="h-1.5 w-1.5 rounded-full bg-purple-400"
               style={{
                 animation: `pulse 1.4s ease-in-out infinite`,
                 animationDelay: `${i * 0.2}s`,

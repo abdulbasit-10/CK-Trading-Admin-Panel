@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   HomeIcon,
   UserGroupIcon,
@@ -12,10 +12,18 @@ import {
   XMarkIcon,
   ClipboardDocumentCheckIcon
 } from '@heroicons/react/24/solid';
+import useAuth from '../auth/useAuth';
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { logout } = useAuth();
   const [isRoleMenuOpen, setIsRoleMenuOpen] = useState(false);
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/login');
+  };
 
   const mainMenuItems = [
     { name: 'Dashboard', icon: HomeIcon, path: '/' },
@@ -57,16 +65,16 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       <aside
         className={`fixed md:relative left-0 top-0 h-screen z-50 md:z-auto ${
           isOpen ? 'w-64' : 'w-0 md:w-20'
-        } bg-gradient-to-b from-blue-600 to-blue-800 text-white transition-all duration-300 ease-in-out overflow-hidden md:overflow-visible`}
+        } bg-[#4E1A6F] text-white transition-all duration-300 ease-in-out overflow-hidden md:overflow-visible flex flex-col`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-blue-500 md:border-b md:border-blue-500 h-16">
+        <div className="shrink-0 flex items-center justify-between p-4 border-b border-[#3d1559] h-16">
           {isOpen && (
             <h1 className="text-xl font-bold truncate">Trading Admin</h1>
           )}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="p-2 hover:bg-blue-500 rounded-lg transition ml-auto"
+            className="p-2 hover:bg-[#6B2496] rounded-lg transition ml-auto"
             aria-label={isOpen ? 'Close sidebar' : 'Open sidebar'}
             aria-expanded={isOpen}
           >
@@ -91,7 +99,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         </div>
 
         {/* Navigation */}
-        <nav className="mt-8 space-y-2 px-3 md:px-4">
+        <nav className="flex-1 overflow-y-auto mt-4 space-y-2 px-3 md:px-4 py-4">
           {mainMenuItems.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.path);
@@ -103,8 +111,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 onClick={handleNavClick}
                 className={`group flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 ${
                   active
-                    ? 'bg-white text-blue-600 shadow-lg'
-                    : 'hover:bg-blue-500 text-white'
+                    ? 'bg-[#FF9201] text-white shadow-lg'
+                    : 'hover:bg-[#6B2496] text-white'
                 }`}
                 title={!isOpen ? item.name : ''}
               >
@@ -122,8 +130,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               onClick={() => setIsRoleMenuOpen(!isRoleMenuOpen)}
               className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 ${
                 isRoleMenuActive
-                  ? 'bg-white text-blue-600 shadow-lg'
-                  : 'hover:bg-blue-500 text-white'
+                  ? 'bg-[#FF9201] text-white shadow-lg'
+                  : 'hover:bg-[#6B2496] text-white'
               }`}
               aria-expanded={isRoleMenuOpen}
               title={!isOpen ? 'Role Management' : ''}
@@ -146,7 +154,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
             {/* Role Submenu - Expanded */}
             {isOpen && isRoleMenuOpen && (
-              <div className="mt-2 space-y-1 pl-4 border-l-2 border-blue-400">
+              <div className="mt-2 space-y-1 pl-4 border-l-2 border-purple-400">
                 {roleMenuItems.map((item) => {
                   const Icon = item.icon;
                   const active = isActive(item.path);
@@ -158,8 +166,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                       onClick={handleNavClick}
                       className={`flex items-center space-x-3 px-4 py-2 rounded-lg transition-all duration-200 text-sm ${
                         active
-                          ? 'bg-blue-500 text-white shadow-md'
-                          : 'hover:bg-blue-500 text-blue-100'
+                          ? 'bg-[#FF9201] text-white shadow-md'
+                          : 'hover:bg-[#6B2496] text-purple-100'
                       }`}
                     >
                       <Icon className="w-5 h-5 flex-shrink-0" />
@@ -184,7 +192,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                       onClick={handleNavClick}
                       className={`flex items-center space-x-3 px-4 py-2 transition whitespace-nowrap ${
                         active
-                          ? 'bg-blue-100 text-blue-600'
+                          ? 'bg-amber-100 text-[#4E1A6F]'
                           : 'hover:bg-gray-100 text-gray-700'
                       }`}
                     >
@@ -199,9 +207,10 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         </nav>
 
         {/* Logout Button */}
-        <div className="absolute bottom-4 left-0 right-0 px-3 md:px-4">
+        <div className="shrink-0 px-3 md:px-4 py-3 border-t border-[#3d1559]">
           <button
-            className="w-full flex items-center justify-center md:justify-start space-x-3 px-4 py-3 rounded-lg hover:bg-blue-500 transition text-white font-medium"
+            onClick={handleLogout}
+            className="w-full flex items-center justify-center md:justify-start space-x-3 px-4 py-3 rounded-lg hover:bg-[#6B2496] transition text-white font-medium"
             title={!isOpen ? 'Logout' : ''}
           >
             <ArrowLeftOnRectangleIcon className="w-6 h-6 flex-shrink-0" />

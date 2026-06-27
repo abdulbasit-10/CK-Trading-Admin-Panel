@@ -34,7 +34,7 @@ const TutorialVideoForm = ({ onSubmit, loading }) => {
       className="bg-white rounded-lg shadow p-6 mb-6"
     >
       <div className="flex items-center gap-2 mb-6">
-        <VideoCameraIcon className="h-6 w-6 text-blue-600" />
+        <VideoCameraIcon className="h-6 w-6 text-[#4E1A6F]" />
         <h2 className="text-xl font-bold text-gray-900">
           Create Tutorial Video
         </h2>
@@ -54,7 +54,7 @@ const TutorialVideoForm = ({ onSubmit, loading }) => {
             placeholder="e.g. Technical Analysis 101"
             required
             className="w-full px-4 py-2 border border-gray-300 rounded-lg
-                       focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                       focus:ring-2 focus:ring-[#4E1A6F] focus:border-transparent outline-none"
           />
         </div>
 
@@ -75,7 +75,7 @@ const TutorialVideoForm = ({ onSubmit, loading }) => {
               placeholder="https://youtube.com/..."
               required
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg
-                         focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                         focus:ring-2 focus:ring-[#4E1A6F] focus:border-transparent outline-none"
             />
           </div>
         </div>
@@ -86,8 +86,8 @@ const TutorialVideoForm = ({ onSubmit, loading }) => {
         <button
           type="submit"
           disabled={loading}
-          className="inline-flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg
-                     hover:bg-blue-700 transition disabled:opacity-50 font-medium"
+          className="inline-flex items-center gap-2 px-6 py-2 bg-[#FF9201] text-white rounded-lg
+                     hover:bg-[#e08200] transition disabled:opacity-50 font-medium"
         >
           {loading ? (
             <>

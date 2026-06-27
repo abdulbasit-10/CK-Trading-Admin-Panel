@@ -173,7 +173,7 @@ const Subscriptions = () => {
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-[#4E1A6F] outline-none"
               >
                 <option value="">All</option>
                 <option value="pending">Pending</option>

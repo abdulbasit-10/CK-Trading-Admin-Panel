@@ -10,7 +10,7 @@ const PartnerTable = ({ data, onEdit, onDelete, loading }) => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#4E1A6F]"></div>
       </div>
     );
   }
@@ -65,7 +65,7 @@ const PartnerTable = ({ data, onEdit, onDelete, loading }) => {
             const isRowLoading = actionId === partner.partner_id;
 
             return (
-              <tr key={partner.partner_id} className={isEditing ? "bg-blue-50" : "hover:bg-gray-50"}>
+              <tr key={partner.partner_id} className={isEditing ? "bg-purple-50" : "hover:bg-gray-50"}>
                 {/* Partner Name */}
                 <td className="px-6 py-4">
                   {isEditing ? (
@@ -90,7 +90,7 @@ const PartnerTable = ({ data, onEdit, onDelete, loading }) => {
                       onChange={(e) => setEditedData({ ...editedData, partner_code: e.target.value })}
                     />
                   ) : (
-                    <code className="bg-gray-100 px-2 py-1 rounded text-xs text-blue-700 font-mono">
+                    <code className="bg-gray-100 px-2 py-1 rounded text-xs text-[#4E1A6F] font-mono">
                       {partner.partner_code}
                     </code>
                   )}
@@ -106,7 +106,7 @@ const PartnerTable = ({ data, onEdit, onDelete, loading }) => {
                       onChange={(e) => setEditedData({ ...editedData, partner_link: e.target.value })}
                     />
                   ) : (
-                    <a href={partner.partner_link} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">
+                    <a href={partner.partner_link} target="_blank" rel="noreferrer" className="text-[#4E1A6F] hover:underline flex items-center gap-1">
                       <LinkIcon className="w-4 h-4" />
                       {partner.partner_link}
                     </a>
@@ -122,8 +122,8 @@ const PartnerTable = ({ data, onEdit, onDelete, loading }) => {
                 <td className="px-6 py-4 text-right">
                   <div className="flex justify-end gap-2">
                     {isRowLoading ? (
-                      <div className="flex items-center space-x-2 text-blue-600">
-                        <div className="animate-spin h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full"></div>
+                      <div className="flex items-center space-x-2 text-[#4E1A6F]">
+                        <div className="animate-spin h-4 w-4 border-2 border-[#4E1A6F] border-t-transparent rounded-full"></div>
                         <span className="text-xs font-medium tracking-tight">Updating...</span>
                       </div>
                     ) : isEditing ? (
