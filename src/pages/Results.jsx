@@ -44,6 +44,7 @@ const Result = () => {
       toast.success("Result created successfully");
       setPage(1);
       fetchResults();
+      return true;
     } catch (err) {
       const message =
         err.response?.data?.message ||
@@ -51,6 +52,7 @@ const Result = () => {
         "Failed to create result";
       setError(message);
       toast.error(message);
+      return false;
     } finally {
       setLoading(false);
     }

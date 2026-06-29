@@ -94,7 +94,20 @@ export const NotificationProvider = ({ children }) => {
     };
   }, [loading, isAuthenticated]);
 
-  const markAllAsRead = () => setUnreadCount(0);
+  const markAllAsRead = async () => {
+    try {
+      // Update backend
+      await notificationAPI.markAllAsRead();
+      
+      // Update local state
+      setNotifications((prev) =>
+        prev.map((n) => ({ ...n, is_read: true }))
+      );
+      setUnreadCount(0);
+    } catch (err) {
+      console.error("Failed to mark notifications as read:", err);
+    }
+  };
 
   return (
     <NotificationContext.Provider

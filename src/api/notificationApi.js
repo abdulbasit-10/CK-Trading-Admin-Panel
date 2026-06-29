@@ -18,4 +18,12 @@ export const notificationAPI = {
         const res = await apiClient.get("/notifications");
         return res.data?.data || [];
     },
+
+    /**
+     * Mark all notifications as read for the logged-in admin.
+     */
+    markAllAsRead: async () => {
+        const res = await apiClient.patch("/notifications/read");
+        return res.data;
+    },
 }

@@ -42,6 +42,7 @@ const SignalForm = ({ editingSignal, onCancelEdit, onSuccess }) => {
           : editingSignal.message_delta;
         quillRef.current.setContents(delta);
       } catch (e) {
+        console.error("Failed to parse message_delta:", e);
         quillRef.current.setText(editingSignal.message_text || "");
       }
 
@@ -126,11 +127,12 @@ const SignalForm = ({ editingSignal, onCancelEdit, onSuccess }) => {
         // CALL CREATE API
         await signalAPI.createSignal(formData);
         toast.success("Signal created successfully");
-        // Reset form after successful create
-        quillRef.current.setContents([]);
-        setPreview(null);
-        setMedia(null);
       }
+
+      // Reset form after successful operation
+      quillRef.current.setText('');
+      setPreview(null);
+      setMedia(null);
 
       onSuccess(); // Trigger parent refresh and reset
     } catch (error) {

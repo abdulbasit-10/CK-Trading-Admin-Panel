@@ -15,16 +15,26 @@ const ResultForm = ({ onSubmit, loading }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    onSubmit({
+    const success = await onSubmit({
       name: formData.name,
       category: formData.category,
       tp: Number(formData.tp),
       sl: Number(formData.sl),
       total_wins: Number(formData.total_wins),
     });
+
+    if (success) {
+      setFormData({
+        name: "",
+        category: "Crypto",
+        tp: "",
+        sl: "",
+        total_wins: "",
+      });
+    }
   };
 
   return (
