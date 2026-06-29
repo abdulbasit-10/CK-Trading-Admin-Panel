@@ -223,9 +223,12 @@ const AnalysisForm = ({ onSubmit, loading }) => {
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           rows="4"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4E1A6F] outline-none resize-none"
+          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#4E1A6F] outline-none resize-none ${errors.description ? 'border-red-500' : 'border-gray-300'}`}
           placeholder="E.g., Head and Shoulders pattern forming on 4H chart..."
         />
+        {errors.description && (
+          <p className="mt-1 text-sm text-red-600">{errors.description}</p>
+        )}
       </div>
 
 

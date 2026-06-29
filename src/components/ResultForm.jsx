@@ -4,7 +4,7 @@ import { PlusIcon } from "@heroicons/react/24/solid";
 const ResultForm = ({ onSubmit, loading }) => {
   const [formData, setFormData] = useState({
     name: "",
-    category: "crypto",
+    category: "Crypto",
     tp: "",
     sl: "",
     total_wins: "",
@@ -66,9 +66,6 @@ const ResultForm = ({ onSubmit, loading }) => {
             className="w-full px-4 py-2 border border-gray-300 rounded-lg
                        focus:ring-2 focus:ring-[#4E1A6F] focus:border-transparent outline-none"
           >
-            <option value="Select Category" disabled>
-              Select Category
-            </option>
             <option value="Crypto">Crypto</option>
             <option value="Forex">Forex</option>
           </select>

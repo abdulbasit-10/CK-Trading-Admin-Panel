@@ -103,10 +103,10 @@ const SignalForm = ({ editingSignal, onCancelEdit, onSuccess }) => {
     const delta = quill.getContents();
     const rawText = quill.getText().trim();
 
-    // if (!rawText) {
-    //   toast.error("Message cannot be empty");
-    //   return;
-    // }
+    if (!editingSignal && !rawText && !media) {
+      toast.error("Signal must contain a message or media");
+      return;
+    }
 
     try {
       setLoading(true);
@@ -120,13 +120,16 @@ const SignalForm = ({ editingSignal, onCancelEdit, onSuccess }) => {
 
       if (editingSignal) {
         // CALL UPDATE API
-        console.log("Updating signal", editingSignal.id)
         await signalAPI.updateSignal(editingSignal.id, formData);
         toast.success("Signal updated successfully");
       } else {
         // CALL CREATE API
         await signalAPI.createSignal(formData);
         toast.success("Signal created successfully");
+        // Reset form after successful create
+        quillRef.current.setContents([]);
+        setPreview(null);
+        setMedia(null);
       }
 
       onSuccess(); // Trigger parent refresh and reset

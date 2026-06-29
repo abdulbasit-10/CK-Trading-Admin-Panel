@@ -157,7 +157,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 }`}
                 title={!isOpen ? item.name : ''}
               >
-                <Icon className="w-6 h-6 flex-shrink-0" />
+                <Icon className="w-6 h-6 shrink-0" />
                 {isOpen && (
                   <span className="font-medium truncate">{item.name}</span>
                 )}
@@ -177,14 +177,14 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               aria-expanded={isRoleMenuExpanded}
               title={!isOpen ? 'Role Management' : ''}
             >
-              <UserGroupIcon className="w-6 h-6 flex-shrink-0" />
+              <UserGroupIcon className="w-6 h-6 shrink-0" />
               {isOpen && (
                 <>
                   <span className="font-medium flex-1 text-left truncate">
                     Role Management
                   </span>
                   <ChevronDownIcon
-                    className={`w-5 h-5 flex-shrink-0 transition-transform duration-200 ${
+                    className={`w-5 h-5 shrink-0 transition-transform duration-200 ${
                       isRoleMenuExpanded ? 'rotate-180' : ''
                     }`}
                     aria-hidden="true"
@@ -211,7 +211,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                           : 'hover:bg-[#6B2496] text-purple-100'
                       }`}
                     >
-                      <Icon className="w-5 h-5 flex-shrink-0" />
+                      <Icon className="w-5 h-5 shrink-0" />
                       <span className="font-medium truncate">{item.name}</span>
                     </Link>
                   );
@@ -237,7 +237,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                           : 'hover:bg-gray-100 text-gray-700'
                       }`}
                     >
-                      <Icon className="w-5 h-5 flex-shrink-0" />
+                      <Icon className="w-5 h-5 shrink-0" />
                       <span className="font-medium">{item.name}</span>
                     </Link>
                   );
@@ -254,7 +254,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             className="w-full flex items-center justify-center md:justify-start space-x-3 px-4 py-3 rounded-lg hover:bg-[#6B2496] transition text-white font-medium"
             title={!isOpen ? 'Logout' : ''}
           >
-            <ArrowLeftOnRectangleIcon className="w-6 h-6 flex-shrink-0" />
+            <ArrowLeftOnRectangleIcon className="w-6 h-6 shrink-0" />
             {isOpen && <span>Logout</span>}
           </button>
         </div>

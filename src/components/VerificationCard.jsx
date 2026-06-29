@@ -15,8 +15,6 @@ const safeCapitalize = (value) =>
 const VerificationCard = ({
   verification,
   user,
-  subscription,
-  partner,
   partners = [],
   onApprove,
   onReject,
@@ -199,6 +197,14 @@ const VerificationCard = ({
             </div>
           </div>
         </div>
+
+        {/* Rejection Reason */}
+        {verification.review_status === "rejected" && verification.review_comment && (
+          <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-sm font-medium text-red-700 mb-1">Rejection Reason:</p>
+            <p className="text-sm text-red-600">{verification.review_comment}</p>
+          </div>
+        )}
 
         {/* Actions */}
         {isPending && (

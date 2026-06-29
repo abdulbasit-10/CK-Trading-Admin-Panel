@@ -27,9 +27,13 @@ const TrustWalletAdminPage = () => {
     }, []);
 
     const handleCreate = async (newData) => {
-        await trustWalletApi.createCredentials(newData);
-        toast.success("Trust wallet credentials created");
-        await fetchTrustWallet();
+        try {
+            await trustWalletApi.createCredentials(newData);
+            toast.success("Trust wallet credentials created");
+            await fetchTrustWallet();
+        } catch (err) {
+            toast.error(err?.response?.data?.message || "Failed to create trust wallet credentials");
+        }
     };
 
     const handleSave = async (newData) => {

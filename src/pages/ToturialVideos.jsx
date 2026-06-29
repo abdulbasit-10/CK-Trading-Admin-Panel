@@ -27,8 +27,8 @@ const TutorialVideoPage = () => {
 
       console.log(res);
       
-      // Adjust these keys based on your actual API response structure
-      setVideos(res); 
+      // Extract videos array from API response
+      setVideos(res.data || []);
       setTotalPages(res.totalPages || 1);
     } catch (err) {
       toast.error("Failed to fetch videos");
