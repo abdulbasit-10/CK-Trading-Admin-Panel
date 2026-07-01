@@ -13,6 +13,7 @@ import {
   ClipboardDocumentCheckIcon
 } from '@heroicons/react/24/solid';
 import useAuth from '../auth/useAuth';
+import logo from '/logo.jpeg';
 
 const ROLE_MENU_STORAGE_KEY = 'sidebar:roleMenuOpen';
 
@@ -110,9 +111,12 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       >
         {/* Header */}
         <div className="shrink-0 flex items-center justify-between p-4 border-b border-[#3d1559] h-16">
-          {isOpen && (
-            <h1 className="text-xl font-bold truncate">Trading Admin</h1>
-          )}
+          <div className="flex items-center gap-3 overflow-hidden">
+            <img src={logo} alt="App Logo" className="w-10 h-10 rounded-lg object-cover shadow-sm shrink-0" />
+            {isOpen && (
+              <h1 className="text-xl font-bold truncate">Trading Admin</h1>
+            )}
+          </div>
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="p-2 hover:bg-[#6B2496] rounded-lg transition ml-auto"

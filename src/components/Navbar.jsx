@@ -7,7 +7,9 @@ import useAuth from '../auth/useAuth';
 
 const Navbar = ({ toggleSidebar }) => {
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
+  const adminName = user?.full_name || 'Admin User';
+  const adminRole = user?.role || 'Administrator';
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const {
@@ -51,7 +53,7 @@ const Navbar = ({ toggleSidebar }) => {
           </button>
         </div>
 
-        {/* CENTER: Title (Visible on mobile to fill space) */}
+        {/* CENTER: Title (Visible on mobile) */}
         <div className="flex-1 md:hidden text-center">
           <h2 className="text-lg font-bold text-gray-800 tracking-tight">Trading Admin</h2>
         </div>
@@ -132,9 +134,9 @@ const Navbar = ({ toggleSidebar }) => {
               }}
               className="flex items-center gap-3 p-1 pr-2 hover:bg-gray-50 rounded-full md:rounded-lg transition"
             >
-              <div className="hidden md:block text-right">
-                <p className="text-sm font-bold text-gray-800 leading-none">Admin User</p>
-                <p className="text-[10px] uppercase tracking-wider font-bold text-gray-400 mt-1">Administrator</p>
+              <div className="text-right">
+                <p className="text-sm font-bold text-gray-800 leading-none">{adminName}</p>
+                <p className="text-[10px] uppercase tracking-wider font-bold text-gray-400 mt-1">{adminRole}</p>
               </div>
               <UserCircleIcon className="w-9 h-9 text-[#4E1A6F]" />
             </button>
@@ -142,8 +144,8 @@ const Navbar = ({ toggleSidebar }) => {
             {isProfileOpen && (
               <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-200 z-50 py-2">
                 <div className="px-4 py-3 border-b border-gray-100 md:hidden">
-                  <p className="text-sm font-bold text-gray-800">Admin User</p>
-                  <p className="text-xs text-gray-500 truncate">admin@trading.com</p>
+                  <p className="text-sm font-bold text-gray-800">{adminName}</p>
+                  <p className="text-xs text-gray-500 truncate">{user?.email || 'admin@trading.com'}</p>
                 </div>
 
                 <div className="px-2 pt-2">

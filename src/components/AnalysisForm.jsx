@@ -20,23 +20,24 @@ const AnalysisForm = ({ onSubmit, loading }) => {
   const [filteredSymbols, setFilteredSymbols] = useState([]);
   const [symbolSearch, setSymbolSearch] = useState('');
   const [showSymbolDropdown, setShowSymbolDropdown] = useState(false);
+  const [isCustomSymbol, setIsCustomSymbol] = useState(false);
+  const [customSymbol, setCustomSymbol] = useState('');
 
   useEffect(() => {
-    loadSymbols();
+    const fetchSymbols = async () => {
+      try {
+        const pairs =
+          formData.category === 'Forex'
+            ? await symbolsAPI.getForexPairs()
+            : await symbolsAPI.getCryptoPairs();
+        setSymbols(pairs);
+        setFilteredSymbols(pairs);
+      } catch (error) {
+        console.error('Error loading symbols:', error);
+      }
+    };
+    fetchSymbols();
   }, [formData.category]);
-
-  const loadSymbols = async () => {
-    try {
-      const pairs =
-        formData.category === 'Forex'
-          ? await symbolsAPI.getForexPairs()
-          : await symbolsAPI.getCryptoPairs();
-      setSymbols(pairs);
-      setFilteredSymbols(pairs);
-    } catch (error) {
-      console.error('Error loading symbols:', error);
-    }
-  };
 
   const handleSymbolSearch = (e) => {
     const value = e.target.value.toUpperCase();
@@ -116,6 +117,8 @@ const AnalysisForm = ({ onSubmit, loading }) => {
         visibility: 'public'
       });
       setSymbolSearch('');
+      setIsCustomSymbol(false);
+      setCustomSymbol('');
     }
   };
 
@@ -144,22 +147,67 @@ const AnalysisForm = ({ onSubmit, loading }) => {
         {/* Symbol */}
         <div className="relative">
           <label className="block text-sm font-semibold text-gray-700 mb-1">Symbol *</label>
-          <input
-            type="text"
-            value={symbolSearch || formData.symbol}
-            onChange={handleSymbolSearch}
-            onFocus={() => setShowSymbolDropdown(true)}
-            placeholder="Search symbol..."
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4E1A6F] outline-none"
-          />
-          {showSymbolDropdown && filteredSymbols.length > 0 && (
-            <div className="absolute z-20 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-xl max-h-48 overflow-y-auto">
-              {filteredSymbols.map((s, idx) => (
-                <button key={idx} type="button" onClick={() => handleSymbolSelect(s)} className="w-full text-left px-4 py-2 hover:bg-purple-50 transition text-sm">
-                  {s}
-                </button>
-              ))}
+          {isCustomSymbol ? (
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={customSymbol}
+                onChange={(e) => {
+                  const val = e.target.value.toUpperCase();
+                  setCustomSymbol(val);
+                  setFormData({ ...formData, symbol: val });
+                }}
+                placeholder="Type custom symbol..."
+                className={`flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#4E1A6F] outline-none ${errors.symbol ? 'border-red-500' : 'border-gray-300'}`}
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  setIsCustomSymbol(false);
+                  setCustomSymbol('');
+                  setFormData({ ...formData, symbol: '' });
+                }}
+                className="px-3 py-2 text-sm text-gray-500 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+                title="Back to symbol list"
+              >
+                ✕
+              </button>
             </div>
+          ) : (
+            <>
+              <input
+                type="text"
+                value={symbolSearch || formData.symbol}
+                onChange={handleSymbolSearch}
+                onFocus={() => setShowSymbolDropdown(true)}
+                placeholder="Search symbol..."
+                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#4E1A6F] outline-none ${errors.symbol ? 'border-red-500' : 'border-gray-300'}`}
+              />
+              {showSymbolDropdown && (
+                <div className="absolute z-20 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-xl max-h-48 overflow-y-auto">
+                  {filteredSymbols.map((s, idx) => (
+                    <button key={idx} type="button" onClick={() => handleSymbolSelect(s)} className="w-full text-left px-4 py-2 hover:bg-purple-50 transition text-sm">
+                      {s}
+                    </button>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsCustomSymbol(true);
+                      setShowSymbolDropdown(false);
+                      setSymbolSearch('');
+                      setFormData({ ...formData, symbol: '' });
+                    }}
+                    className="w-full text-left px-4 py-2 hover:bg-orange-50 text-orange-600 font-semibold transition text-sm border-t border-gray-100"
+                  >
+                    + Other (Custom Symbol)
+                  </button>
+                </div>
+              )}
+            </>
+          )}
+          {errors.symbol && (
+            <p className="mt-1 text-sm text-red-600">{errors.symbol}</p>
           )}
         </div>
 
