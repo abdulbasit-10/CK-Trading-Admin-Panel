@@ -114,7 +114,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           <div className="flex items-center gap-3 overflow-hidden">
             <img src={logo} alt="App Logo" className="w-10 h-10 rounded-lg object-cover shadow-sm shrink-0" />
             {isOpen && (
-              <h1 className="text-xl font-bold truncate">Trading Admin</h1>
+              <h1 className="text-xl font-bold truncate">Trading App</h1>
             )}
           </div>
           <button

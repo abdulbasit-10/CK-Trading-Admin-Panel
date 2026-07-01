@@ -57,6 +57,11 @@ const Navbar = ({ toggleSidebar }) => {
         <div className="flex-1 md:hidden text-center">
           <h2 className="text-lg font-bold text-gray-800 tracking-tight">Trading Admin</h2>
         </div>
+        <div>
+          <h1 className="text-[30px] font-semibold text-gray-700">
+            Welcome, <span className="font-bold text-[#4E1A6F] ">{adminName}</span>
+          </h1>
+        </div>
 
         {/* RIGHT: Push everything to the end */}
         <div className="flex items-center justify-end flex-1 space-x-3 md:space-x-4">
