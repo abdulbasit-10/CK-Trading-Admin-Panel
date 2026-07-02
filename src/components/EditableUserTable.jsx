@@ -1,7 +1,9 @@
 import React from 'react';
 import { TrashIcon } from '@heroicons/react/24/solid';
+import useAuth from '../auth/useAuth';
 
 const EditableUserTable = ({ columns, data, onDelete, loading }) => {
+  const { user: currentUser } = useAuth();
   // Loading State
   if (loading) {
     return (
@@ -61,13 +63,16 @@ const EditableUserTable = ({ columns, data, onDelete, loading }) => {
                 {onDelete && (
                   <td className="px-4 py-3">
                     <div className="flex items-center space-x-2">
-                      <button
-                        onClick={() => onDelete(rowId)}
-                        className="p-2 hover:bg-red-100 rounded-lg transition text-red-600"
-                        title="Delete"
-                      >
-                        <TrashIcon className="w-4 h-4" />
-                      </button>
+                      {/* Admins cannot delete their own account from this table */}
+                      {currentUser?.id !== rowId && (
+                        <button
+                          onClick={() => onDelete(rowId)}
+                          className="p-2 hover:bg-red-100 rounded-lg transition text-red-600"
+                          title="Delete"
+                        >
+                          <TrashIcon className="w-4 h-4" />
+                        </button>
+                      )}
                     </div>
                   </td>
                 )}

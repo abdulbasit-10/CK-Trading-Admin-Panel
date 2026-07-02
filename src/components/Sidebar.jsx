@@ -85,11 +85,11 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     }
   };
 
-  // Role-menu links should not collapse the dropdown – only close the
-  // sidebar drawer on mobile.
+  // Role-menu links: close the popover (collapsed mode) and the sidebar
+  // drawer on mobile, but keep the dropdown open in expanded mode.
   const handleRoleNavClick = (event) => {
     event.stopPropagation();
-    setIsRoleMenuOpen(true);
+    setIsRoleMenuOpen(false);
     handleNavClick();
   };
 
@@ -106,11 +106,11 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
       <aside
         className={`fixed md:relative left-0 top-0 h-screen z-50 md:z-auto ${
-          isOpen ? 'w-64' : 'w-0 md:w-20'
+          isOpen ? 'w-64' : 'w-0 md:w-25'
         } bg-[#4E1A6F] text-white transition-all duration-300 ease-in-out overflow-hidden md:overflow-visible flex flex-col`}
       >
         {/* Header */}
-        <div className="shrink-0 flex items-center justify-between p-4 border-b border-[#3d1559] h-16">
+        <div className="shrink-0 flex items-center justify-between  p-4 border-b border-[#3d1559] h-16">
           <div className="flex items-center gap-3 overflow-hidden">
             <img src={logo} alt="App Logo" className="w-10 h-10 rounded-lg object-cover shadow-sm shrink-0" />
             {isOpen && (
@@ -224,7 +224,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             )}
 
             {/* Role Menu Popover - Collapsed */}
-            {!isOpen && isRoleMenuExpanded && (
+            {/* Only show when the user explicitly toggled it open, not just because the route is active */}
+            {!isOpen && isRoleMenuOpen && (
               <div className="absolute left-20 top-48 bg-white rounded-lg shadow-xl py-2 z-50 w-max">
                 {roleMenuItems.map((item) => {
                   const Icon = item.icon;
