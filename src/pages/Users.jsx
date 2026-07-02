@@ -77,6 +77,7 @@ const Users = () => {
       toast.success('User deleted');
       fetchData();
     } catch (err) {
+      // Surface the exact backend message (self-delete guard, etc.)
       toast.error(err.response?.data?.message || 'Delete failed');
     }
   };

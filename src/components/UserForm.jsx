@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import Button from './Button';
 import { PlusIcon } from '@heroicons/react/24/solid';
-import { partnerAPI } from '../services/homeApi';
+// import { partnerAPI } from '../services/homeApi';
+import { validatePassword, PASSWORD_HINT } from '../utils/passwordPolicy';
 
 const UserForm = ({ onSubmit, loading, partners = [] }) => {
 
@@ -28,7 +29,10 @@ const UserForm = ({ onSubmit, loading, partners = [] }) => {
     if (!formData.full_name.trim()) newErrors.full_name = 'Full name is required';
 
     if (!formData.password.trim()) newErrors.password = 'Password is required';
-    else if (formData.password.length < 6) newErrors.password = 'Minimum 6 characters';
+    else {
+      const pwError = validatePassword(formData.password);
+      if (pwError) newErrors.password = pwError;
+    }
 
     if (['monthly', 'yearly'].includes(formData.subscription_type) && !formData.subscription_expires_at) {
       newErrors.subscription_expires_at = 'Expiration date is required';
@@ -106,7 +110,10 @@ const UserForm = ({ onSubmit, loading, partners = [] }) => {
             onChange={handleChange}
             className={`w-full px-3 py-2 border rounded-lg ${errors.password ? 'border-red-500' : 'border-gray-300'}`}
           />
-          {errors.password && <p className="text-xs text-red-500">{errors.password}</p>}
+          {errors.password
+            ? <p className="text-xs text-red-500">{errors.password}</p>
+            : <p className="text-xs text-gray-400 mt-0.5">{PASSWORD_HINT}</p>
+          }
         </div>
 
         {/* Subscription Type */}

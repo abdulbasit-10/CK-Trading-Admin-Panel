@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PlusIcon } from '@heroicons/react/24/solid';
+import { validatePassword, PASSWORD_HINT } from '../utils/passwordPolicy';
 
 const AdminForm = ({ onSubmit, loading, roles }) => {
   const [formData, setFormData] = useState({
@@ -23,8 +24,10 @@ const AdminForm = ({ onSubmit, loading, roles }) => {
     if (!formData.email.trim()) newErrors.email = 'Email is required';
     if (!formData.email.includes('@')) newErrors.email = 'Invalid email format';
     if (!formData.full_name.trim()) newErrors.full_name = 'Full name is required';
-    if (!formData.password_hash.trim()) newErrors.password_hash = 'Password is required';
-    if (formData.password_hash.length < 6) newErrors.password_hash = 'Password must be at least 6 characters';
+
+    const pwError = validatePassword(formData.password_hash);
+    if (pwError) newErrors.password_hash = pwError;
+
     if (!formData.role_id) newErrors.role_id = 'Please select a role';
 
     setErrors(newErrors);
@@ -60,7 +63,7 @@ const handleSubmit = (e) => {
   return (
     <form onSubmit={handleSubmit} className="bg-white rounded-xl  border border-gray-100 overflow-hidden mb-6">
       {/* Header with Vibrant Purple-Pink Gradient */}
-      <div className="bg-gradient-to-r from-purple-600 to-pink-500 px-6 py-4">
+      <div className="bg-linear-to-r from-purple-600 to-pink-500 px-6 py-4">
         <h2 className="text-xl font-bold text-white">Add New Administrator</h2>
         <p className="text-purple-100 text-sm">Create credentials for a new staff member</p>
       </div>
@@ -112,7 +115,10 @@ const handleSubmit = (e) => {
               }`}
               placeholder="••••••••"
             />
-            {errors.password_hash && <p className="text-red-500 text-xs mt-1 font-medium">{errors.password_hash}</p>}
+            {errors.password_hash
+              ? <p className="text-red-500 text-xs mt-1 font-medium">{errors.password_hash}</p>
+              : <p className="text-gray-400 text-xs mt-1">{PASSWORD_HINT}</p>
+            }
           </div>
 
           {/* Role Selection */}
@@ -143,7 +149,7 @@ const handleSubmit = (e) => {
           <button
             type="submit"
             disabled={loading}
-            className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-orange-500 to-red-600 text-white font-bold rounded-lg shadow-lg hover:shadow-orange-200 hover:scale-105 active:scale-95 transition-all disabled:opacity-50"
+            className="flex items-center gap-2 px-8 py-3 bg-linear-to-r from-orange-500 to-red-600 text-white font-bold rounded-lg shadow-lg hover:shadow-orange-200 hover:scale-105 active:scale-95 transition-all disabled:opacity-50"
           >
             {loading ? (
               <span className="animate-pulse">Processing...</span>

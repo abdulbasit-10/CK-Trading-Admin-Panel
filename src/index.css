@@ -3,6 +3,21 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Sidebar scrollbar — matches the sidebar background (#4E1A6F) */
+aside ::-webkit-scrollbar {
+  width: 4px;
+}
+aside ::-webkit-scrollbar-track {
+  background: #4E1A6F;
+}
+aside ::-webkit-scrollbar-thumb {
+  background: #6B2496;
+  border-radius: 2px;
+}
+aside ::-webkit-scrollbar-thumb:hover {
+  background: #FF9201;
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Edit2, Trash2, Check, X, Loader2 } from 'lucide-react';
+import useAuth from '../auth/useAuth';
 
 const AdminsTable = ({ data, columns, loading, onEdit, onDelete, rowKey = 'user_id' }) => {
+  const { user: currentUser } = useAuth();
   const [editingId, setEditingId] = useState(null);
   const [editForm, setEditForm] = useState({});
 
@@ -107,16 +109,20 @@ const AdminsTable = ({ data, columns, loading, onEdit, onDelete, rowKey = 'user_
                     <div className="flex justify-end space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
                       <button
                         onClick={() => startEditing(admin)}
-                        className="p-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-lg hover:shadow-md transition-all active:scale-95"
+                        className="p-2 bg-linear-to-r from-blue-500 to-cyan-500 text-white rounded-lg hover:shadow-md transition-all active:scale-95"
                       >
                         <Edit2 size={16} />
                       </button>
-                      <button
-                        onClick={() => onDelete(admin[rowKey])}
-                        className="p-2 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-lg hover:shadow-md transition-all active:scale-95"
-                      >
-                        <Trash2 size={16} />
-                      </button>
+                      {/* Hide delete button for the currently logged-in user's own row */}
+                      {currentUser?.id !== admin[rowKey] && (
+                        <button
+                          onClick={() => onDelete(admin[rowKey])}
+                          className="p-2 bg-linear-to-r from-orange-500 to-red-600 text-white rounded-lg hover:shadow-md transition-all active:scale-95"
+                          title="Delete admin"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      )}
                     </div>
                   )}
                 </td>

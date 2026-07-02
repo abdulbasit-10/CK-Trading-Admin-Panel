@@ -1,35 +1,52 @@
 // src/pages/Login.jsx
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import useAuth from "../auth/useAuth";
 
 const LoginPage = () => {
-  const { login } = useAuth();
+  const { login, user, loading } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [formLoading, setFormLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // While the auth check is in progress show nothing (prevents flash).
+  if (loading) return null;
+
+  // If already authenticated, send straight to the dashboard.
+  // This covers the "refresh on /login after logout failed to clear cookie"
+  // scenario — if initAuth succeeds the user is redirected here before
+  // the login form ever renders.
+  if (user) return <Navigate to="/" replace />;
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
-    setLoading(true);
+    setFormLoading(true);
 
     try {
-      const user = await login(email, password);
+      const loggedInUser = await login(email, password);
 
       // Role check (optional, extra safety)
-      if (!["admin", "super_admin"].includes(user.role)) {
+      if (!["admin", "super_admin"].includes(loggedInUser.role)) {
         throw new Error("Access denied");
       }
 
       navigate("/", { replace: true });
     } catch (err) {
-      setError(err.response?.data?.message || err.message || "Login failed");
+      const status = err.response?.status;
+      if (status === 429) {
+        setError(
+          err.response?.data?.message ||
+            "Too many login attempts. Please wait a few minutes and try again."
+        );
+      } else {
+        setError(err.response?.data?.message || err.message || "Login failed");
+      }
     } finally {
-      setLoading(false);
+      setFormLoading(false);
     }
   };
 
@@ -77,10 +94,10 @@ const LoginPage = () => {
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={formLoading}
             className="w-full py-2 text-white bg-[#FF9201] rounded-md disabled:opacity-50"
           >
-            {loading ? "Logging in..." : "Log In"}
+            {formLoading ? "Logging in..." : "Log In"}
           </button>
         </form>
       </div>

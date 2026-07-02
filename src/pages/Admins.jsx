@@ -7,7 +7,7 @@ import AdminForm from '../components/AdminForm';
 import AdminsTable from '../components/AdminTable';
 
 const Admins = () => {
-  const { admins, loading, setAdmins, setLoading, setError, error } = useAdminStore();
+  const { admins, loading, setAdmins, setLoading, setError } = useAdminStore();
   const [formLoading, setFormLoading] = useState(false);
   const [roles, setRoles] = useState([]);
 
@@ -86,7 +86,9 @@ const Admins = () => {
         toast.success("Admin removed from system");
         fetchData();
       } catch (err) {
-        toast.error("Could not delete admin");
+        // Surface the exact backend message (self-delete, last super_admin, etc.)
+        const msg = err.response?.data?.message || "Could not delete admin";
+        toast.error(msg);
       }
     }
   };
@@ -109,7 +111,7 @@ const Admins = () => {
       editable: false, 
       render: (val) => (
         <span className={`px-2 py-1 rounded text-xs font-bold text-white ${
-          val === 'super_admin' ? 'bg-gradient-to-r from-purple-500 to-pink-500' : 'bg-gradient-to-r from-blue-500 to-cyan-500'
+          val === 'super_admin' ? 'bg-linear-to-r from-purple-500 to-pink-500' : 'bg-linear-to-r from-blue-500 to-cyan-500'
         }`}>
           {val === 'super_admin' ? 'SUPER ADMIN' : 'ADMIN'}
         </span>
